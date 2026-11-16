@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TRA CỨU NHÃN HIỆU - ĐẠI DIỆN CHỦ THỂ QUYỀN</title>
+<style>
+:root{--bg:#f2f5f5;--card:#fff;--ink:#12242b;--mute:#5b6e75;--line:#d9e2e4;--pri:#0b5563;--pri-ink:#fff;--mark:#ffd45c;--call:#0b7a4b}
+@media (prefers-color-scheme:dark){:root{--bg:#0f1b1f;--card:#172629;--ink:#e6eff1;--mute:#93a8ae;--line:#2a3f44;--pri:#63b7c6;--pri-ink:#06242a;--mark:#7a5d00;--call:#4cc28a}}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:1rem/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+header{position:sticky;top:0;z-index:5;background:linear-gradient(180deg,#0a3440 0%,#0b5563 100%);color:#fff;padding:max(12px,env(safe-area-inset-top)) 14px 12px;border-bottom:3px solid #f2c14e;box-shadow:0 2px 10px rgba(0,0,0,.25)}
+.ttl{margin:0 0 8px;text-align:center;line-height:1.15}
+.ttl .t1{display:block;font-size:clamp(1.3rem,6.4vw,1.8rem);font-weight:800;letter-spacing:.05em;color:#fff}
+.ttl .t2{display:block;margin-top:5px;padding-top:6px;border-top:1px solid rgba(242,193,78,.55);font-size:clamp(.78rem,3.5vw,1rem);font-weight:700;letter-spacing:.14em;color:#f2c14e}
+.mq{overflow:hidden;white-space:nowrap;margin:0 0 10px;font-size:.92rem;opacity:.95}
+.mq span{display:inline-block;padding-left:100%;animation:mq 14s linear infinite}
+@keyframes mq{from{transform:translateX(0)}to{transform:translateX(-100%)}}
+@media (prefers-reduced-motion:reduce){.mq{white-space:normal}.mq span{padding-left:0;animation:none}}
+.sb{position:relative}
+.sb input{width:100%;font:inherit;padding:12px 58px 12px 14px;border:0;border-radius:10px;background:var(--card);color:var(--ink);outline:none}
+.sb input:focus-visible{box-shadow:0 0 0 3px var(--mark)}
+.clr{position:absolute;right:4px;top:50%;transform:translateY(-50%);height:40px;padding:0 10px;border:0;background:none;color:var(--mute);font:inherit;font-size:.9rem;cursor:pointer;display:none}
+.sug{position:absolute;left:0;right:0;top:100%;margin-top:4px;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:10px;overflow:hidden;display:none;box-shadow:0 8px 24px rgba(0,0,0,.18)}
+.sug button{display:block;width:100%;text-align:left;font:inherit;padding:10px 14px;border:0;border-bottom:1px solid var(--line);background:none;color:inherit;cursor:pointer}
+.sug button:last-child{border-bottom:0}
+main{padding:12px 12px calc(24px + env(safe-area-inset-bottom));max-width:760px;margin:0 auto}
+.tabs{display:flex;gap:8px;margin:0 0 12px}
+.tabs button{flex:1;font:inherit;padding:9px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);cursor:pointer}
+.tabs button[aria-pressed=true]{background:var(--pri);color:var(--pri-ink);border-color:var(--pri);font-weight:600}
+.hint{color:var(--mute);font-size:.92rem;margin:0 0 10px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.chips button{font:inherit;font-size:.92rem;padding:6px 12px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--ink);cursor:pointer}
+.count{color:var(--mute);font-size:.92rem;margin:0 0 10px}
+.rep{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
+.rep h2{margin:0 0 2px;font-size:1.02rem;line-height:1.35}
+.who{color:var(--mute);margin:0 0 10px;font-size:.95rem}
+.phones{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.phones a{display:inline-flex;align-items:center;gap:6px;padding:9px 14px;border-radius:10px;background:var(--call);color:#fff;text-decoration:none;font-weight:600}
+@media (prefers-color-scheme:dark){.phones a{color:#06241a}}
+.phones button{padding:9px 12px;border-radius:10px;border:1px solid var(--line);background:none;color:var(--mute);font:inherit;cursor:pointer}
+.note{background:var(--mark);color:#3a2b00;padding:8px 10px;border-radius:8px;font-size:.92rem;margin:0 0 10px}
+@media (prefers-color-scheme:dark){.note{color:#ffe9a8}}
+.grp{padding:8px 0;border-top:1px solid var(--line);font-size:.95rem}
+.grp b{display:block;font-weight:600;margin-bottom:2px}
+.grp.hit{border-top-color:var(--pri)}
+mark{background:var(--mark);color:inherit;border-radius:3px;padding:0 1px}
+details summary{cursor:pointer;color:var(--pri);padding:6px 0;font-weight:600}
+.empty{text-align:center;color:var(--mute);padding:36px 12px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:8px 16px;border-radius:999px;font-size:.9rem;opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.on{opacity:1}
+.portals{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:14px 0}
+.portals h3{margin:0 0 4px;font-size:1rem}
+.portals p{margin:0 0 8px;color:var(--mute);font-size:.9rem}
+.portals a{display:block;padding:10px 0;border-top:1px solid var(--line);color:var(--pri);text-decoration:none;font-weight:600}
+.portals a small{display:block;color:var(--mute);font-weight:400;font-size:.86rem}
+
+:root{--danger:#b3261e}
+@media (prefers-color-scheme:dark){:root{--danger:#ff8a80}}
+.tools{display:none;gap:8px;margin:0 0 12px;flex-wrap:wrap}
+.tools button{flex:1;min-width:140px;font:inherit;padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--pri);font-weight:600;cursor:pointer}
+.tools button.ok{background:var(--pri);color:var(--pri-ink);border-color:var(--pri)}
+.acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.acts button{font:inherit;font-size:.88rem;padding:6px 12px;border:1px solid var(--line);border-radius:8px;background:none;color:var(--pri);cursor:pointer}
+.acts button.del{color:var(--danger)}
+.acts.top{margin:0 0 6px}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:flex-end;justify-content:center;z-index:20}
+.ov.on{display:flex}
+.md{background:var(--card);color:var(--ink);width:100%;max-width:560px;max-height:92vh;overflow:auto;border-radius:16px 16px 0 0;padding:16px 16px calc(16px + env(safe-area-inset-bottom))}
+.md h3{margin:0 0 4px;font-size:1.05rem}
+.md label{display:block;margin:12px 0 4px;font-weight:600;font-size:.92rem}
+.md input,.md textarea{width:100%;font:inherit;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
+.md textarea{min-height:90px;resize:vertical}
+.md .hint2{color:var(--mute);font-size:.84rem;margin-top:3px}
+.md .err{color:var(--danger);font-size:.9rem;min-height:1.2em;margin-top:8px}
+.md .row{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.md .row button{flex:1;min-width:120px;font:inherit;padding:11px;border-radius:10px;border:1px solid var(--line);background:none;color:var(--ink);cursor:pointer}
+.md .row button.ok{background:var(--pri);color:var(--pri-ink);border-color:var(--pri);font-weight:600}
+.md .row button.del{color:var(--danger)}
+.toast{z-index:30}
+.portals .pl{border-top:1px solid var(--line);padding:8px 0}
+.portals .pl a{border-top:0;padding:2px 0}
+.portals .pl .acts{margin-top:4px}
+footer{color:var(--mute);font-size:.82rem;text-align:center;padding:4px 12px 20px}
+.fbtn{display:block;text-align:center;padding:11px;border-radius:10px;background:var(--pri);color:var(--pri-ink);font-weight:600;cursor:pointer;margin-top:6px}
+.util p{margin:6px 0}
+#login{display:none;position:fixed;inset:0;z-index:50;overflow:auto;background:linear-gradient(180deg,#0a3440 0%,#0b5563 60%,#0f1b1f 100%);color:#fff}
+.lgw{max-width:440px;margin:0 auto;padding:max(28px,env(safe-area-inset-top)) 18px 28px}
+.lgt{margin:12px 0 22px}
+.lgt .t1{font-size:clamp(1.5rem,7.4vw,2rem)}
+.lgc{background:var(--card);color:var(--ink);border-radius:16px;padding:18px;border-top:4px solid #f2c14e}
+.lgc h2{margin:0 0 6px;font-size:1.2rem}
+.lgc label{display:block;margin:12px 0 4px;font-weight:600;font-size:.92rem}
+.lgc input{width:100%;font:inherit;padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink)}
+.lgc .err{color:var(--danger);font-size:.9rem;min-height:1.3em;margin-top:8px}
+.lgc .hint2{color:var(--mute);font-size:.88rem;margin:2px 0 0}
+.lgb{display:block;width:100%;margin-top:10px;padding:13px;border:0;border-radius:10px;background:var(--pri);color:var(--pri-ink);font:inherit;font-weight:700;cursor:pointer}
+.lgl{display:block;width:100%;margin-top:8px;padding:10px;border:0;background:none;color:var(--pri);font:inherit;cursor:pointer}
+.lgf{text-align:center;color:#cfe3e7;font-size:.88rem;margin:18px 0 0}
+.util p a{display:inline;border:0;padding:0;font-weight:600}
+.fb2{background:var(--card);color:var(--pri);border:1px solid var(--pri);width:100%;font:inherit;font-weight:600}
+.chips button[aria-pressed=true]{background:var(--pri);color:var(--pri-ink);border-color:var(--pri)}
+.phones a.zl{background:var(--pri);color:var(--pri-ink)}
+.ug{margin:0 0 10px}
+.ug>summary{font-weight:700;padding:11px 12px;background:var(--card);border:1px solid var(--line);border-radius:10px;color:var(--pri);cursor:pointer}
+.ug[open]>summary{border-radius:10px 10px 0 0}
+.undo{position:fixed;left:50%;bottom:72px;transform:translateX(-50%);z-index:31;background:var(--ink);color:var(--bg);padding:8px 8px 8px 16px;border-radius:999px;font-size:.9rem;display:none;align-items:center;gap:10px;max-width:92%}
+.undo.on{display:flex}
+.undo button{font:inherit;font-weight:700;border:0;border-radius:999px;padding:6px 12px;background:var(--pri);color:var(--pri-ink);cursor:pointer}
+
+/* ===== Trang đăng nhập: bố cục gọn, có viền, không tràn ===== */
+#login{--card:#fff;--ink:#12242b;--mute:#5b6e75;--line:#b9c8cc;--bg:#f4f7f8;--pri:#0b5563;--pri-ink:#fff;--danger:#b3261e;overflow-x:hidden;-webkit-overflow-scrolling:touch}
+#login *{box-sizing:border-box;max-width:100%}
+.lgw{width:100%;max-width:420px;min-height:100%;margin:0 auto;padding:max(24px,env(safe-area-inset-top)) 16px max(24px,env(safe-area-inset-bottom));display:flex;flex-direction:column;justify-content:center}
+.lgt{margin:0 0 18px}
+.lgt .t1{font-size:clamp(1.15rem,6vw,1.65rem);letter-spacing:.03em;white-space:normal;overflow-wrap:anywhere}
+.lgt .t2{font-size:clamp(.7rem,3.1vw,.92rem);letter-spacing:.08em;white-space:normal;overflow-wrap:anywhere}
+.lgc{width:100%;padding:20px 18px 18px;background:#fff;color:#12242b;border:1px solid #cfdadd;border-top:5px solid #f2c14e;border-radius:16px;box-shadow:0 12px 32px rgba(0,0,0,.35);overflow-wrap:anywhere}
+.lgc h2{margin:0;font-size:1.25rem;color:#0b5563;text-align:center}
+.lgc .sub{margin:4px 0 6px;text-align:center;color:#5b6e75;font-size:.9rem}
+.lgc p{overflow-wrap:anywhere}
+.lgc label{display:block;margin:14px 0 6px;font-size:.9rem;font-weight:600;color:#12242b}
+.lgc input,.lgc textarea{display:block;width:100%;min-width:0;font:inherit;font-size:1rem;color:#12242b;background:#fff;border:1.5px solid #b9c8cc;border-radius:10px}
+.lgc input{height:48px;padding:0 12px}
+.lgc textarea{padding:10px;resize:vertical}
+.lgc input:focus,.lgc textarea:focus{outline:none;border-color:#0b5563;box-shadow:0 0 0 3px rgba(11,85,99,.22)}
+.lgc .err{min-height:1.3em;margin-top:8px;font-size:.9rem;color:#b3261e;text-align:center}
+.lgc .hint2{color:#5b6e75;font-size:.88rem}
+.lgb{display:block;width:100%;height:48px;margin-top:14px;padding:0 12px;border:0;border-radius:10px;background:linear-gradient(180deg,#0f6b7c,#0b5563);color:#fff;font:inherit;font-size:1rem;font-weight:700;letter-spacing:.02em;box-shadow:0 2px 6px rgba(11,85,99,.4);cursor:pointer}
+.lgl{display:block;width:100%;margin-top:8px;padding:10px;border:0;background:none;color:#0b5563;font:inherit;font-size:.92rem;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.lgf{margin:16px 0 0;padding-top:12px;border-top:1px solid rgba(255,255,255,.28);color:#d6e6ea;font-size:.85rem;line-height:1.6;text-align:center}
+
+/* ===== Giao diện chính: viền rõ, gọn, không tràn ===== */
+:root{--line:#b4c3c8}
+@media (prefers-color-scheme:dark){:root{--line:#3f565c}}
+main{overflow-wrap:anywhere}
+header{padding:max(8px,env(safe-area-inset-top)) 12px 10px}
+.ttl{margin:0 0 6px}
+.ttl .t1{font-size:clamp(1.05rem,5.2vw,1.4rem)}
+.ttl .t2{margin-top:3px;padding-top:4px;font-size:clamp(.66rem,3vw,.82rem);letter-spacing:.12em}
+.mq{margin:0 0 8px;font-size:.82rem}
+.sb input::-webkit-search-cancel-button{-webkit-appearance:none;display:none}
+.sb input{border:1.5px solid rgba(255,255,255,.6)}
+.tabs{gap:6px}
+.tabs button{padding:10px 4px;font-size:.92rem;white-space:nowrap;border:1.5px solid var(--line);box-shadow:0 1px 2px rgba(0,0,0,.06)}
+.tools button{min-width:0;font-size:.9rem;white-space:nowrap;border:1.5px solid var(--line)}
+#home{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:12px 12px 4px;margin:0 0 12px}
+#home .hint{margin-top:0}
+#cats{flex-wrap:nowrap;overflow-x:auto;gap:8px;padding:8px 10px;margin:0 0 12px;background:var(--card);border:1.5px solid var(--line);border-radius:12px;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
+#cats::before{content:"Ngành hàng";flex:0 0 auto;align-self:center;font-size:.85rem;font-weight:700;color:var(--pri);padding-right:4px}
+#cats button{flex:0 0 auto;white-space:nowrap}
+.chips button{border:1.5px solid var(--line)}
+.rep{border:1.5px solid var(--line);box-shadow:0 1px 4px rgba(0,0,0,.1)}
+.portals{border:1.5px solid var(--line);box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.acts button,.phones button{border-width:1.5px}
+.count{font-weight:600;color:var(--ink)}
+.hint2{color:var(--mute);font-size:.86rem;margin:6px 0}
+.phones{flex-direction:column;align-items:stretch;gap:8px}
+.pr{display:flex;gap:8px;align-items:stretch}
+.pr a:first-child{flex:1;justify-content:center;text-align:center}
+
+/* ===== Co giãn theo mọi cỡ màn hình ===== */
+html{font-size:calc(var(--fs,1) * clamp(15px, 14px + .4vw, 18px));-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{min-height:100vh;min-height:100dvh}
+header{padding-left:max(12px,env(safe-area-inset-left));padding-right:max(12px,env(safe-area-inset-right))}
+header>*{max-width:920px;margin-left:auto;margin-right:auto}
+main{width:100%;max-width:960px;padding-left:max(12px,env(safe-area-inset-left));padding-right:max(12px,env(safe-area-inset-right))}
+.tabs button,.acts button,.phones a,.phones button,.chips button,.tools button{min-height:42px}
+.acts button{display:inline-flex;align-items:center;justify-content:center}
+#list{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;align-items:start}
+#list>.rep,#list>.empty{margin:0}
+#list>.empty{grid-column:1/-1}
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid #f2c14e;outline-offset:2px}
+@media (hover:hover){button:hover,.fbtn:hover{filter:brightness(.96)}.chips button:hover,.tabs button:hover{border-color:var(--pri)}}
+@media (max-width:340px){.tabs button{font-size:.82rem;padding:8px 2px}.chips button{font-size:.84rem;padding:6px 10px}.rep{padding:12px}.phones a{padding:9px 10px}}
+@media (min-width:600px){.ov{align-items:center}.md{border-radius:16px;max-height:88vh;border:1.5px solid var(--line)}.undo{bottom:32px}}
+@media (min-width:720px){.rep{padding:16px}}
+@media (min-width:900px){
+  #list{grid-template-columns:repeat(2,minmax(0,1fr))}
+  main{max-width:1080px;padding-top:16px;padding-bottom:32px}
+  header>*{max-width:1040px}
+  .ttl .t1{font-size:1.9rem}.ttl .t2{font-size:.95rem}.mq{font-size:.95rem}
+  .sb input{padding-top:14px;padding-bottom:14px}
+  .tabs{max-width:560px}
+  #cats{flex-wrap:wrap;overflow:visible}
+  .util{display:block}
+}
+@media (min-width:1280px){html{font-size:calc(var(--fs,1) * 18px)}main{max-width:1180px}header>*{max-width:1140px}}
+@media (max-height:500px) and (orientation:landscape){header{position:static}.ttl .t2{display:none}.lgw{justify-content:flex-start}}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+#login .lgw{max-width:420px}
+@media (min-width:900px){#login .lgw{max-width:460px}#login .lgt .t1{font-size:1.9rem}#login .lgt .t2{font-size:.95rem}}
+header>.ttl,header>.mq,header>.sb{margin-left:auto;margin-right:auto}
+.pr a:first-child{white-space:nowrap}
+.lgs{display:block;width:100%;height:48px;margin-top:10px;border:1.5px solid #0b5563;border-radius:10px;background:#fff;color:#0b5563;font:inherit;font-weight:700;cursor:pointer}
+</style>
+</head>
+<body>
+<div id="login"></div>
+<header>
+  <h1 class="ttl"><span class="t1">TRA CỨU NHÃN HIỆU</span><span class="t2">ĐẠI DIỆN CHỦ THỂ QUYỀN</span></h1>
+  <div class="mq" aria-label="Tác giả Nguyễn Văn Hảo, số điện thoại 0913294532"><span>Tác giả Nguyễn Văn Hảo - SĐT 0913294532</span></div>
+  <div class="sb">
+    <input id="q" type="search" inputmode="search" autocomplete="off" placeholder="Nhãn hiệu, công ty, số điện thoại…" aria-label="Tìm kiếm">
+    <button class="clr" id="clr" aria-label="Xóa">Xóa</button>
+    <div class="sug" id="sug"></div>
+  </div>
+</header>
+<main>
+  <div class="tabs">
+    <button id="t1" aria-pressed="true">Tra cứu</button>
+    <button id="t2" aria-pressed="false">Đại diện</button>
+    <button id="t3" aria-pressed="false">Tiện ích</button>
+  </div>
+  <div class="tools" id="tools"><button type="button" class="ok" data-act="ar">Thêm đại diện</button><button type="button" data-act="bk">Sao lưu / Khôi phục</button></div>
+  <div class="chips" id="cats"></div>
+  <div id="home">
+    <p class="hint">Gõ tên nhãn hiệu để biết đơn vị đại diện và số điện thoại cần liên hệ. Có thể gõ không dấu.</p>
+    <div class="chips" id="chips"></div>
+    <div id="homeX"></div>
+  </div>
+  <div id="util" style="display:none"></div>
+  <div id="portalsHome"></div>
+  <p class="count" id="count"></p>
+  <div id="list"></div>
+  <p class="hint2" id="disc" style="display:none">Thông tin chỉ mang tính tham khảo, cần xác minh trước khi sử dụng chính thức.</p>
+  <div id="portalsRes"></div>
+</main>
+<div class="ov" id="ov"></div>
+<div class="toast" id="toast"></div>
+<div class="undo" id="undo"></div>
+<script>
+const DEFAULT_DATA = [{"stt": 1, "name": "Công ty Luật TNHH Phạm và Liên danh", "contact": "Tú Nam", "phones": ["0949.846.996", "0975.925.866"], "groups": [["", "HONDA, YAMAHA, ADIDAS, Y-3, UNI QLO, GU, MANCHESTER, MUJI, KEIHIN, Kawasaki, SHISEIDO, KOTEX, BIG BABOL, ALPENLIEBE, CHUPA CHUPS, GOLIA, Wacoal, KIKKOMAN, DEL MONTE, DUCATI, Patagonia, Dow, BEAM, Filmtec, Mitutoyo, Waxone, Sysmex, SUNTORY, PANASONIC, NATIONAL, SANYO, TECHNIS, Aritzia (Babaton, Wilfred, TNA), DeWALT, TRANSINO, NGK"]], "note": ""}, {"stt": 2, "name": "Công ty TNHH sở hữu trí tuệ VINA.IP", "contact": "Hương", "phones": ["0979.899.099"], "groups": [["", "Louis Vuitton (LV), RIMOWA"]], "note": "Chú ý: Liên hệ trước khi tiến hành kiểm tra, khám"}, {"stt": 3, "name": "Công ty TNHH Tư Vấn Sở Hữu Trí Tuệ IPT", "contact": "Hiếu", "phones": ["0937.459.318"], "groups": [["Túi xách, bóp ví, quần áo, giày dép, dây lưng, nước hoa, mỹ phẩm,...", "HERMÈS (Đơn do IPT nộp đơn yêu cầu), CHANEL, BVLGARI, CARTIER, MONTBLANC, CHLOÉ, VALENTINO, VLTN, MCM, ZEGNA, ERMENEGILDO ZEGNA, BURBERRY. G FORE"], ["Kính mắt", "HERMÈS (Đơn do IPT nộp đơn yêu cầu), MONTBLANC, BVLGARI, CARTIER, CHANEL, MCM, PORSCHE/PORSCHE DESIGN, BURBERRY, VALENTINO."], ["Trang sức, phụ kiện (Bông tai, dây chuyền, vòng tay, nhẫn, cài áo...)", "HERMÈS (Đơn do IPT nộp đơn yêu cầu), CHANEL, CARTIER, BVLGARI. Van Cleef & Arpels"], ["Quần áo thể thao, phụ tùng xe hơi", "PORSCHE/PORSCHE DESIGN."], ["Đồng Hồ", "HERMÈS (Đơn do IPT nộp đơn yêu cầu), ROLEX, CARTIER, RICHARD MILLE, PIAGET, ROGER DUBUIS, VACHERON CONSTANTIN, MONTBLANC, BVLGARI, TUDOR, CHANEL, BURBERRY, Van Cleef & Arpels"]], "note": ""}, {"stt": 4, "name": "Công ty cổ phần SHCN INVESTIP", "contact": "Tú", "phones": ["0912.002.485"], "groups": [["", "KUBOTA, D&G, YAMAHA, TIGER, HELLO KITTY, Samrio, KFC, LADY GAGA, DI GIO', Arai HELMET, AGIP, DELTA, ENAT 400, PAPER ONE, JOTUNE, Salvatore Ferragamo, KYOCERA, LUXALON, MAC, WD-40, ISUZU, KIRIN, HINO, TIMEX, PIAGGIO, SONY, DHL, VALENTINO, RAY-BAN, Gentle Monster, EAGLEYE, titebond, Black Rouge"]], "note": ""}, {"stt": 5, "name": "Công ty TNHH tư vấn sở hữu trí tuệ Việt (Viet IP)", "contact": "Thủy / Long", "phones": ["0913.602.777", "0835.614.444"], "groups": [["", "PANASONIC, National, SANYO, eneloop, CASIO, MOTUL, Castrol, bp, Biore, Kao, Dulux, MAXILITE, LISTERINE, TOP TO TOE, Johnson Baby, Fugacar, OGX, Neutrogen, CASIO, G-SHOCK, BABY-G, EDIFICE, EPSON, TL THIEN LONG"]], "note": ""}, {"stt": 6, "name": "Công ty Luật TNHH Thắng Phạm & Cộng sự", "contact": "Thắng", "phones": ["0904.698.246"], "groups": [["Hàng thời trang (Túi xách, giày dép, dây lưng, quần áo, ba lô, phụ kiện (vòng, ốp điện thoại …)", "HERMES; PORSCHE, PORSCHE DESIGN; UNDER ARMOUR; SUPERDRY; CHARLES & KEITH; PEDRO; VICTORIA’S SECRET Nước hoa, mỹ phẩm: HERMES; L'ORÉAL; LANCÔME; MAYBELLINE; VICHY, Kiehl's,; shu uemura; KÉRASTASE; URBAN DECAY; CeraVe; NYX; GARNIER; YSL; GIORGIO ARMANI; POLO/RALPH LAUREN; LAROCHE-POSAY; 3CE, STYLENANDA, Bio Oil; VICTORIA’S SECRET; Xmen; UNILEVER (OMO, CLEAR, SUNSILK, COMFORT, SUNLIGHT, P/S, CLOSE UP, LIFEBUOY, DOVE, LUX, VIM, SUFT, CIF, HAZELINE, AXE CLICK, AXE TIST, AXE DARK TEMPTATION, REXONA, POND'S, Simple, Signal, VISO, TIGI); Diesel; Aesop; VALENTINO; Viktor&Rolf; MASION MARGIELA (REPLICA) Dầu gội, sữa tắm, kem đánh răng, sản phẩm vệ sinh cá nhân, đồ gia dụng của P&G: HEAD & SHOULDERS, PANTENE, REJOICE, OLAY; PRO-V, ORAL-B, CREST, TIDE, DOWNY, GILLETTE Dược mỹ phẩm: Dr.G Hóa mỹ phẩm, keo dán: HENKEL; LOCTITE; Đồ gia dụng (điện tử; thiết bị vệ sinh; đồ nhà bếp): TOSHIBA; TOTO; ZWILLING Đồ chơi, văn phòng phẩm: PEPPA PIG; MAPED Phụ tùng ô tô: PORSCHE Đồ ăn/uống: YAKULT; CON BÒ CƯỜI (La Vache Qui Rit); THUẬN PHÁT (nước mắm, sa tế); KNORR (UNILEVER) Vật liệu xây dựng (trần, thạch cao): VĨNH TƯỜNG; DURAFLEX;"]], "note": ""}, {"stt": 7, "name": "Công ty Sunrise Sportgears Vietnam", "contact": "Nghĩa", "phones": ["0988.998.669"], "groups": [["", "YONEX"]], "note": ""}, {"stt": 8, "name": "Công ty TNHH Nike Việt Nam", "contact": "Nhựt Ngọc", "phones": ["0988.026.896", "0909.918.290"], "groups": [["", "NIKE, CONVERSE, Jordan"]], "note": ""}, {"stt": 9, "name": "Công ty cổ phần cao su Sao Vàng", "contact": "Hà", "phones": ["0913.223.182"], "groups": [["", "SRC"]], "note": ""}, {"stt": 10, "name": "Công ty AJINOMOTO Việt Nam", "contact": "Thắng", "phones": ["0902.265.986"], "groups": [["", "AJINOMOTO"]], "note": ""}, {"stt": 11, "name": "Công ty Akzonobel Việt Nam", "contact": "Vang", "phones": ["0913.800.836"], "groups": [["", "DULUX, MAXILITE, Weathershield"]], "note": ""}, {"stt": 12, "name": "Công ty TNHH Beiersdorf Việt Nam", "contact": "Phương", "phones": ["0989.949.956"], "groups": [["", "NIVEA"]], "note": ""}, {"stt": 13, "name": "Công ty TNHH LIXIL Việt Nam", "contact": "Hoài", "phones": ["0936.655.545"], "groups": [["", "INAX, American Standard, Grohe"]], "note": ""}, {"stt": 14, "name": "Công ty cổ phần bóng đèn phích nước Rạng Đông", "contact": "Khanh", "phones": ["0982.281883"], "groups": [["", "Rạng Đông"]], "note": ""}, {"stt": 15, "name": "Công ty TNHH đông nam dược Bảo Linh", "contact": "Tuấn", "phones": ["0903.597.293"], "groups": [["", "Bạch Hổ Hoạt Lạc Cao"]], "note": ""}, {"stt": 16, "name": "Công ty cổ phần xuất nhập khẩu Bình Tây", "contact": "Công", "phones": ["0907.401.818"], "groups": [["", "CASIO"]], "note": ""}, {"stt": 17, "name": "Công ty TNHH Võ Trần", "contact": "Hằng", "phones": ["0985.234.034", "0916.471.349"], "groups": [["Thời trang", "CHANEL"], ["Mực in", "HP, SAMSUNG"], ["Thuốc lá điếu", "ASTRO"], ["Vòng bi, bạc đạn, gối đỡ", "FAG, LuK, INA, SCHAEFFLER"]], "note": ""}, {"stt": 18, "name": "Công ty TNHH HOAMI", "contact": "Hằng", "phones": ["0985.234.034", "0916.471.349"], "groups": [["iPhone, iPod, iPad, phụ kiện", "APPLE"], ["Tai nghe, loa", "Beats"], ["Mực in, Pin", "CANON"], ["Thuốc, dược phẩm, tắm, gội", "SANOFI, LACTACYD, ALPHA CHOAY, Phosphalugel"]], "note": ""}, {"stt": 19, "name": "Công ty cổ phần hàng tiêu dùng Masan", "contact": "Sự", "phones": ["0934.184.566"], "groups": [["", "VINACAFE, 247, AKTIVA, WAKE-UP, VĨNH HẢO, OMACHI, SAGAMI, KOMI, B'Fast, KaChi, CON CÒ, NAM NGƯ, CHIN-SU, TAM THÁI TỬ"]], "note": ""}, {"stt": 20, "name": "Công ty Luật TNHH IPMAX", "contact": "Đức (MB) / Nguyệt (MN)", "phones": ["0912.442.089", "0983.585.406"], "groups": [["", "LEVI'S, 501, CK (Calvin Klein), GIORGIO ARMANI, EMPORIO ARMANI, TOMMY HILFIGER, TOMMY JEANS, Olaplex (mỹ phẩm cho tóc), Red Bull, ELFBAR; LOST MARY; GEEKBAR (thuốc lá điện tử)"]], "note": ""}, {"stt": 21, "name": "Công ty UNILEVER Việt Nam", "contact": "Đăng", "phones": ["0914.398.443"], "groups": [["", "OMO, COMFORT, VIM, SUFT, VISO, SUNLIGHT, CIF, P/S, CLOSE UP, LIFEBUOY, CLEAR, SUNSILK, DOVE, LUX, HAZELINE, AXE CLICK, AXE TIST, AXE DARK TEMPTATION, REXONA, POND'S, WALL'S, CORNETTO, PADDLE POP, LIPTON, LIPTON ICE TEA, KNORR, TIGI"]], "note": ""}, {"stt": 22, "name": "Công ty TNHH sở hữu trí tuệ S&O", "contact": "Cường Phạm Vân Phan Hồng Hải", "phones": ["0969.280.151", "0705.791.643", "0932.060.095"], "groups": [["Quần áo, túi xách, bóp ví, đồng hồ, các phụ kiện thời trang", "COACH, KATE SPADE, JACK SPADE, STUART WEITZMAN, LONGCHAMP, LE PLIAGE, FJÄLLRÄVEN và hình con cáo, TORY BURCH, MARC JACOBS, TOUS, NEW ERA. PUMA, Tory Burch, UNDER ARMOUR, CALVIN KLEIN (CK)"], ["Giày dép", "NEW BALANCE, ASICS, ONITSUKA TIGER, COACH, KATE SPADE, TORY BURCH, STUART WEITZMAN, JELENK, PUMA..."], ["Mắt kính", "RAYBAN, OAKLEY, COACH, HUGO BOSS, KATE SPADE, JACK SPADE, PERSOL, ARNETTE, HOLBROOK, VOGUE, EVZERO..."], ["Nước hoa, mỹ phẩm", "CALVIN KLEIN (CK), MARC JACOBS, CHLOÉ, HUGO BOSS, SK-II, OLAY, DAVIDOFF, COOL WATER, LOVE STORY, ETERNITY, EUPHORIA, BOURJOIS, COVER GIRL, ESCADA, MAX FACTOR, RIMME, NIVEA"], ["Dầu gội, sữa tắm, kem đánh răng, sản phẩm vệ sinh cá nhân, đồ gia dụng", "HEAD & SHOULDERS, PANTENE, REJOICE, PRO-V, ORAL-B, CREST, TIDE, DOWNY, OLD SPICE..."], ["Bao cao su, chất bôi trơn, dụng cụ y tế", "DUREX, K-Y, EASY-ON, KINGTEX, PERFORMA,..."], ["Dao cạo, dụng cụ cầm tay, dao kéo đa năng, dao kéo bỏ túi các loại", "GILLETTE, VECTOR, VICTORINOX, SWISSGEAR, WENGER SWISS ARMY, SUPER TAPER, WAHL,..."], ["Nhiên hiệu, dầu và mỡ bôi trơn, khí đốt", "F1, FORMULA 1, ELF GAZ, HI-PERF, TOTAL,..."]], "note": ""}, {"stt": 23, "name": "Công ty Luật TNHH quốc tế BMVN", "contact": "Hương Dung Hà", "phones": ["0983.096.656", "0913.648.086", "0334.803.127"], "groups": [["Thời trang và phụ kiện", "GUCCI, puma,THE NORTH FACE, LACOSTE, YSL, TOMMY HILFIGER, POLO RALPH LAUREN, ZARA, PULL & BEAR, BERSHKA, TRF, VANS, TIKTOK, SKECHERS, BOSS, HUGO BOSS, BOTTEGA VENETA, BALENCIAGA, Columbia, LA SENZA, Triumph, solggi, Wacoal, DR. MARTEN, SWAROVSKI, MASIMO DUTTI, TOM FORD, TF, DICKIES, MLB, New York Yankees, GOYARD"], ["Thực phẩm và đồ uống", "STARBUCKS, FRAPPUCCINO,"], ["Đồ điện và điện tử", "7-ELEVEN, AMP netconnect, COMMSCOPE, SONY, DELL, WD WESTERN DIGITAL, BOSE, Nikon:, JBL, haman/kardon, SOLES"], ["Đồ gia dụng", "IKEA, ZARA HOME, SCHOTT CERAN, BRAUN"], ["Chăm sóc sức khỏe", "ZINNAT, PIGEON, Pampers, Whisper, DUMEX"], ["Hóa mỹ phẩm dùng cho cá nhân", "DARLIE, SENSODYNE, AQUAFRESH, GILLETTE, VICTORIA'S SECRET, SK-II, OLAY, P&G, head & shoulders, REJOICE, Oral-B, PANTENE, SAFEGUARD, BOBBI BROWN, ESTEE LAUDER, CLINIQUE, MAC, ARM&HAMMER, CURASH, TOPPIK, SHISEIDO, D PROGRAM, SENKA, ELIXIR, de de peau BEUTE, BAREMINERALS,"], ["Hóa mỹ phẩm dùng cho gia đình và lĩnh vực khác", "TIDE, DOWNY, ambi pur, ARIEL, Pentel, OXICLEAN, SHELL"]], "note": ""}, {"stt": 24, "name": "Công ty Cổ phần khóa Việt Tiệp", "contact": "Việt Anh", "phones": ["0916.757.086"], "groups": [["", "VIỆT TIỆP"]], "note": ""}, {"stt": 25, "name": "VPĐD BAT MARKETTING (SINGAPORE) Pte Ltd", "contact": "Bình", "phones": ["0912.230.198"], "groups": [["Thuốc lá điếu", "555, CRAVEN, WHITE HORSE, KENT, Everese"]], "note": ""}, {"stt": 26, "name": "Công ty TNHH Diageo Việt Nam", "contact": "Hiền", "phones": ["0919.382.282"], "groups": [["Rượu", "Johnnie Walker, Smirnoff, Singleton, CIROC, BUCHANAN'S, Orand Old Parr, Gordon's, RARE J&B, Tanqueray, Haig Club"]], "note": ""}, {"stt": 27, "name": "Công ty TNHH Sản xuất và Dịch vụ thương mại BNB", "contact": "", "phones": ["02432.888.999"], "groups": [["", "TESORI D'ORIENTE"]], "note": ""}, {"stt": 28, "name": "Công ty CP Kỹ thuật và Khoa học Vĩnh Khang", "contact": "Mai", "phones": ["0938.843.096"], "groups": [["", "OPPO"]], "note": ""}, {"stt": 29, "name": "Công ty Luật TNHH Apolat Legal", "contact": "Xuân Lan", "phones": ["0908.498.680", "0911.357.447"], "groups": [["", "Dầu gió xanh con ó (Eagle Brand)"]], "note": ""}, {"stt": 30, "name": "Công ty cổ phần thời trang Yody", "contact": "Thắng", "phones": ["0914.398.480"], "groups": [["", "Yody"]], "note": ""}, {"stt": 31, "name": "Công ty Sở hữu trí tuệ Thảo Thọ Quyến", "contact": "Diệu", "phones": ["0817.113.482"], "groups": [["Bánh kẹo", "CHOCOPIE"], ["Thiết bị cảm biến", "OPTEX"], ["Máy bơm, vòng đệm, Gioăng", "NETZSCH"]], "note": ""}, {"stt": 32, "name": "Công ty TNHH tư vấn Đầu tư và Chuyển giao Công nghệ", "contact": "Dương", "phones": ["0986.167.393"], "groups": [["", "Kappa"]], "note": ""}, {"stt": 33, "name": "Công ty TNHH Makita Việt Nam", "contact": "Hà", "phones": ["0978.303.366"], "groups": [["", "Makita"]], "note": ""}, {"stt": 34, "name": "Công ty TNHH Tầm nhìn và Liên danh", "contact": "Dương", "phones": ["0328.114.233"], "groups": [["", "HP (Nhóm 9, 10, 16,37, 41,42)"]], "note": ""}, {"stt": 35, "name": "Công ty TNHH Trà và cộng sự", "contact": "Trà", "phones": ["0913.300.876"], "groups": [["", "Li-Ning"]], "note": ""}, {"stt": 36, "name": "Công ty thiết bị vệ sinh Caesar Việt Nam", "contact": "Cúc", "phones": ["0971.859.658"], "groups": [["", "Caesar"]], "note": ""}, {"stt": 37, "name": "Văn phòng luật sư A Hòa / Công ty TNHH MTV REACT Việt Nam", "contact": "Ngân / Hiền", "phones": ["0906.589.795", "0911.712.922"], "groups": [["Quần áo", "Gucci, Balenciaga, Bottega Veneta, Yves Saint Laurent, YSL, Puma, Asics, Onitsuka Tiger, MCM, Cole Haan, Fila, 3M, 5.11 Tactical, PXG (Parsons Xtreme Golf)"], ["Giày dép", "Gucci, Balenciaga, Bottega Veneta, Yves Saint Laurent, YSL, Puma, Asics, Onitsuka Tiger, MCM, Cole Haan, Fila, 5.11 Tactical, PXG (Parsons Xtreme Golf)"], ["Túi, ví", "Gucci, Balenciaga, Bottega Veneta, Yves Saint Laurent, YSL, Puma, Asics, Onitsuka Tiger, MCM, Cole Haan, Fila, PXG (Parsons Xtreme Golf)"], ["Mắt kính", "Gucci, Yves Saint Laurent, YSL, Puma, Cole Haan, Fila, Daniel Wellington, Orient, Ray-Ban (RayBan), Oakley"], ["Nước hoa, mỹ phẩm", "Gucci, Guilty, Balenciaga, Bottega Veneta, SK-II, Cole Haan, Olay."], ["Điện thoại, phụ kiện, thiết bị điện, điện tử", "Samsung, Skullcandy, Huawei (các sản phẩm giá trị cao), Bose, Philips."], ["Đồng hồ", "Casio, G-Shock, Bagy-G, Edifice, Gucci, Saint Laurent , YSL, MCM, Cole Haan, Orient, Daniel Wellington (DW)"], ["Sản phẩm chăm sóc, vệ sinh cá nhân", "Head&Shoulders, Pantene, Rejoice, Oral-B, Gillette."], ["Sản phẩm tẩy rửa", "Downy, Tide, Always, Pampers."], ["Dao cạo", "Gillette, Dorco, Tinkle"], ["Phụ tùng ô tô", "FAG"], ["Thuốc", "Novartis, Syngenta, Fugacar, Voltaren"], ["Khác", "EPSON (mực in);"]], "note": ""}, {"stt": 38, "name": "Công ty Luật TNHH T&G", "contact": "Giang", "phones": ["0389.917.816"], "groups": [["Thời trang (quần áo, túi xách, đồ da, giày dép)", "H&M, MANGO, VICTORIA’S SECRET, CHAMPION, HANES, GAP, BABY GAP, OLD NAVY, LVMH (bao gồm các thương hiệu Dior, CD, Celine, Kenzo, Loewe, Fendi, Givenchy, v.v), CHRISTIAN LOUBOUTIN, VIBRAM, FURLA, Colehaan, BIRKENSTOCK, Deckers Outdoor (bao gồm các thương hiệu TEVA, SANUK, UGG), PLAYBOY, CARTER’S, ECKO UNLTD, RHINO, NEW BALANCE, DECATHLON, QUECHUA, ASOS, TOPMAN, PUMA, Titleist"], ["Đồng hồ", "LVMH (bao gồm các thương hiệu Hublot, TAG Heuer, Zenith, Chaumet, Fred, Dior, CD, v.v), Omega, Longines, Rado, Tissot, Breguet, Blancpain, HARRY WINSTON, Jaquet-Droz, Hamilton, Mido, Certina, Balmain, FLIK FLAK, Union, CANDINO, FOSSIL"], ["Hóa mỹ phẩm", "LVMH (bao gồm các thương hiệu Dior, Givenchy, Fendi, Guerlain, Make up forever, Sephora, Benefit, Fresh, v.v) AMOREPACIFIC (bao gồm các thương hiệu như INNISFREE, IOPE, LANEIGE, HERA, MAMONDE, Sulwhasoo, ETUDE, ESPOIR v.v), COLGATE, PALMOLIVE, BEIERSDORF (bao gồm nhiều thương hiệu NIVEA, EUCERIN, Aquaphor), GSK (kem đánh răng Sensodyne), BATH & BODY WORKS, REVITALASH, REVITABROW, COSRX, Hygiene"], ["Thuốc lá", "IQOS, MARLBORO, HEETS, LUFFMAN"], ["Đồ uống", "ABSOLUT, KAHLUA, MONSTER ENERGY, MOET HENNESSY (bao gồm Hennessy, Ardbeg, Glenmorangie, Chandon, Dom Perignon, Krug, Mercier, Moet & Chandon, Ruinart, Veuve Clicquot), XL Energy Drink"], ["Thực phẩm và Thực phẩm chức năng", "NESTLE (bao gồm các thương hiệu Lavie, NESCAFE, MILO, KITKAT, MAGGI, thực phẩm ăn dặm Gerber, Cerelac, sữa bột NAN, ngũ cốc NesVita v.v.), ORION (bao gồm các thương hiệu ChocoPie, Custas, Gouté, Marine Boy, v.v.), HERSHEY, FERRERO (có các thương hiệu như Roche, KINDER JOY, NUTELLA), BLACKMORES, Herbalife, AMWAY"], ["Dược phẩm", "Servier (có các thương hiệu COVERAM, DIAMICRON, COVERSYL, COVERSYL PLUS, DAFLON, NATRILIX, VASTAREL, PROCORALAN v.v.), Merck Sharp & Dohme (có các thương hiệu NEXAVAR, JANUMET), Bayer (có các thương hiệu Soravar, Xarelto, Elevit,…), Novartis, Pfizer, BOEHRINGER INGELHEIM, MYLAN, HEPBEST, ROCHE, GSK (có các thương hiệu Panadol)"], ["Đồ chơi", "Mattel (có các thương hiệu như BARBIE, Hot Wheels, Thomas & Friends, Fisher-Price, Mega Bloks, Uno, Scrabble), Hasbro (gồm các thương hiệu BUMBLEBEE, NERF, MY LITTLE PONY, PLAYDOH, HASBRO, TRANSFORMER)"], ["Văn phòng phẩm", "Bút LAMY"], ["Thiết bị điện tử", "HP, CISCO, WESTERN DIGITAL, NOKIA, SanDiskWES, SEAGATE, DELL, XIAOMI"], ["Đồ gia dụng", "PHILIPS, TOSHIBA, BLUM, MEDELA, DORCO, WESTINGHOUSE, LUMINARC, BOSCH, FAGOR, Electrolux, Mitsubishi"], ["Loa", "BMB, JBL"], ["Phụ tùng xe/động cơ", "BMW, MERCEDES, FORD, Mitkam Makon, SKF (vòng bi), Nachi (vòng bi), DONALDSON (thiết bị lọc), FLEETGUARD (thiết bị lọc), MAHLE"], ["Giày bảo hộ lao động", "SAFETY JOGGER, OXYPAS"], ["Hóa chất", "FMC (các sản phẩm thuốc bảo vệ thực vật), BAYER (các sản phẩm thuốc bảo vệ thực vật)"], ["Các sản phẩm tiêu dùng khác", "PRYM, PRYM 555 (cúc bấm), SNOW (khăn ướt), PLAYBOY (sản phẩm hỗ trợ tình dục), SIANG PURE (dầu y tế), METO (nhãn dán)"]], "note": ""}, {"stt": 39, "name": "Công ty TNHH tư vấn THB Công ty TNHH SNB React Việt Nam", "contact": "Toàn Đạt Hiền", "phones": ["0833.888.776", "0866.771.402", "0911.712.922"], "groups": [["Quần áo", "Puma, Asics, MCM, Fila, 3M, Moncler, Onitsuka Tiger, NewEra, Michael Kors, Jimmy Choo, Bjorn Borg, 49Forty, 39Thirdty, Harley-Davidson, Fred perry, Borussia Dortmund, Dickies, Gucci, YSL, Bottega Veneta, Balenciaga."], ["Giày dép", "Puma, Asics, MCM, Hoka, Onitsuka Tiger, New Era, Jimmy Choo, Cole Haan, Moncler, Timberland, Dr. Martens, Airwair, Gucci, YSL, Bottega Veneta, Balenciaga"], ["Túi, ví", "Puma, Asics, MCM, Fila,Onitsuka Tiger, Asics, Michael Kors, Gucci, YSL, Bottega Veneta, Balenciaga"], ["Mắt kính", "Puma, Gentle Monster, Fila, Daniel Wellington, Orient, Moncler, Gucci, YSL, Bottega Veneta, Balenciaga"], ["Trang sức", "Pandora, Daniel Wellington, Swarovski, Gucci, YSL, Bottega Veneta, Balenciaga"], ["Nước hoa, mỹ phẩm", "Dior ,SK-II,ColeHaan, Olay, Jimmy Choo, G-Star, Johnson, Johnson&Johnson, Nivea, Eucerin, Gucci, YSL, Bottega Veneta, Balenciaga."], ["Điện thoại, phụ kiện, thiết bị điện, điện tử", "Samsung, Nokia, Huawei (các sản phẩmgiá trị cao), Philips, Dolby, harman/kardon, JBL, HDMI, Dyson, Osram, Epson, Bosch, 3M"], ["Đồng hồ", "Casio, G-Shock, Versace, MCM, Orient,Daniel Wellington (DW), Michael Kors, Swarovski, Gucci, YSL, Bottega Veneta, Balenciaga"], ["Sản phẩm chăm sóc, vệ sinh cá nhân", "P&G, Head&Shoulders, Pantene, Rejoice, Oral-B, Gillette, Olay, Cetaphil"], ["Sản phẩm tẩy rửa", "Downy, Tide, G-Star, Mr.Muscle, Kiwi, Pledge, 3M"], ["Dao cạo, lưỡi dao cạo", "Gillette, Dorco, Pace, Shai, Tinkle"], ["Phụ tùng ô tô", "Hyundai, Kia, Jaguar"], ["Dược phẩm, dụng cụ y tế", "Novartis, Fugacar, Voltaren, Topamax, Ethicon, Janssen, Botox, Juvederm"], ["Bánh kẹo", "kinder,kinder joy, tictac, FerreroRocher, Golden Moments, Rocher, nutella, Raffaello"], ["Thuốc bảo vệ thực vật", "Syngenta (Solito320EC, Proclaim1,9EC, RevusOpti, Trigard 100 SL, Score250Ec, Sofit300EC, Nevo330EC, Karate 2,5EC, Chess50WG, DualGold960EC...)"], ["Dụng cụ thể thao", "Yonex, E-tune, Arcsaber, Zforce"], ["Khác", "mực in(Epson), máy móc (Stihl), thiết bị khóa cửa (AssaAbploy, Yale), đồ chơi (Peppa Pig, UNO), thẻ nhớ (SanDisk, SD, Micro SD), rượu (Jack Daniel’s)"], ["Nhãn hiệu trong nước", "Fascino(xe đạp),ToànMỹ (Bánh kẹo), EUS (thiết bị gia dụng, đồ điện tử)"]], "note": ""}, {"stt": 40, "name": "Công ty Luật TNHH Rouse Việt Nam", "contact": "Khoa Khang Trung Trang Huyền", "phones": ["0931.107588", "0907.502.083", "0379.783.869", "0943.712.386", "0868.291.002"], "groups": [["Thiết bị điện tử, viễn thông, pin và phụ kiện", "Huawei (HUAWEI MATE; HUAWEI NOVA); UL; HITACHI; GS Yuasa (GS); ENERGIZER; MARSHALL; JELLYCAT"], ["Dụng cụ điện, máy móc, thiết bị công nghiệp và đo lường", "BOSCH; DANFOSS; WIKA; JTEKT (KOYO); Stanley Black & Decker (DeWALT; CRAFTSMAN; IRWIN; STANLEY; BLACK DECKER; LENOX); Techtronic Cordless GP (Milwaukee; RYOBI; AEG; Empire; IMPERIAL BLADES; Homelite; KANGO; Hoover; ORECK; Dirt Devil)"], ["Gia dụng, thiết bị nhà bếp, nội thất", "CONAIR (BABYLISS; CUISINART); A.O.SMITH; JELLYCAT"], ["Thang máy, dịch vụ kỹ thuật", "Inventio (Schindler)"], ["Ô tô, xe máy, xe đạp, phụ tùng và phụ kiện", "TOYOTA (LEXUS); HONDA (ACCORD; HR-V; CR-V; CITY; CIVIC; ODYSSEY; BRIO RS; CBR; REBEL; SH; SH mode; Air Blade; LEAD; VISION; FUTURE NEO; WINNERX; SUPER CUB; WAVE; SUPER DREAM); BABYZEN (YOYO)"], ["Thời trang, giày dép, túi xách và phụ kiện", "adidas; Harley-Davidson; PRADA; MIU MIU; Crocs (CROCS; HEY DUDE; JIBBITZ); DEUTER; DR. MARTENS; ROTHY’S; LULULEMON; On Clouds (ON; CLOUD); DANIEL WELLINGTON"], ["Trang sức, đồng hồ, phụ kiện cao cấp", "Richemont (Chloé; CHLOE; CARTIER; MONTBLANC; SEE BY CHLOE; ALAÏA; PORTUGIESER; ALHAMBRA; Meisterstück; IWC; EGERIE; VAN CLEEF & ARPELS; PORTOFINO; BALLON BLEU); DANIEL WELLINGTON; JELLYCAT"], ["Dược phẩm", "Ipsen Group (tanakan; SMECTA); Allergan (ALLERGAN BOTOX; BOTOX); STADA; GlaxoSmithKline (gsk; ATARAX; NOOTROPYL); Abbott (GLOTADOL; SERC; DUPHALAC; Creon; DUSPATALIN; KLACID; DUPHASTON; LUVOX; BETASERC; LYPSTAPLUS; FEMOSTON)"], ["Thực phẩm chức năng và sản phẩm dinh dưỡng", "Abbott (ENSURE; PEDIASURE; GLUCERNA; SIMILAC; PROSURE); FONTERRA (ANLENE; NZMP; ANMUM); Reckitt (SCHIFF)"], ["Mỹ phẩm, dược mỹ phẩm", "Allergan (ALLERGAN BOTOX; BOTOX); NAOS (BIODERMA); ROHTO (HADALABO)"], ["Sản phẩm vệ sinh cá nhân và chăm sóc cá nhân", "KIMBERLY CLARK (KOTEX; HUGGIES); Church & Dwight (ARM & HAMMER; FEMFRESH; TOPPIK; Batiste); UNILEVER (closeup; P/S; Rexona; Lifebuoy; LUX; AXE; Signal)"], ["Chất tẩy rửa, vệ sinh nhà cửa", "UNILEVER (OMO; Sunlight; Comfort; Surf; Vim; Cif); Church & Dwight (ARM & HAMMER)"], ["Bao cao su và chất bôi trơn", "Reckitt (DUREX; K-Y); Church & Dwight (TROJAN)"], ["Thực phẩm, gia vị, kem", "UNILEVER (Knorr; MAGNUM; Wall’s; BEN & JERRY’S); HEINZ"], ["Đồ uống, nước giải khát", "Coca-Cola (NUTRIBOOST; DASANI)"], ["Bánh kẹo, thực phẩm ăn vặt", "Mars / Wrigley (HUBBA BUBBA; SNICKERS; DOUBLEMINT; Skittles); ORION (ChocoPie; O’Star)"], ["Đồ ăn nhanh", "Yum! (KFC; PIZZA HUT)"], ["Hóa chất, sơn, dầu khí", "EXXON MOBIL; JOTUN"], ["Đồ chơi, trò chơi", "LEGO (NINJAGO; FRIENDS; NEXO KNIGHTS); Spin Master (PAW PATROL); JELLYCAT"], ["Dịch vụ công nghệ, mạng xã hội và giải trí", "GOOGLE (YOUTUBE); Bytedance (TIKTOK)"], ["Khách sạn, nhà hàng, dịch vụ lưu trú", "CAPELLA"], ["Rượu và đồ uống có cồn hoặc không cồn", "Mast-Jägermeister (JAGERMEISTER)"], ["Đồ thể thao, dệt may, thảm và hàng gia dụng", "On Clouds (ON; CLOUD), adidas; JELLYCAT"], ["Giáo dục", "JELLYCAT"], ["Văn phòng phẩm", "JELLYCAT"]], "note": ""}, {"stt": 41, "name": "Công ty TNHH Tầm nhìn và Liên danh", "contact": "Khương", "phones": ["0908.326.877"], "groups": [["", "Uniqlo (quần áo, đồ thời trang), RIKEN (màng phim dán cách nhiệt dùng cho ô tô), LYN (túi xách), Cleansui (hóa chất lọc nước), OMRON (thiết bị y tế), INAX (thiết bị vệ sinh), Orientalmotor (Máy phát điện), The Ordinary (Mỹ phẩm), Moschino (Đồ thời trang, mỹ phẩm), EPIC (Chỉ khâu), YKK (khóa kéo), MICHELIN, TIREPLUS (lốp xe), Nature’s Way (thực phẩm chức năng, vitamin, chất bổ sung dinh dưỡng), OBAGI (mỹ phẩm), Tupperware (hộp chứa gia dụng), JUKI (máy khâu), Nikon (máy ảnh), SHUN (dao nhà bếp), SU:M 37, VEILMENT SPA, OHUI, THEFACESHOP, LG Household (mỹ phẩm), Takashimaya (siêu thị), Paperone (giấy in), Wacoal (quần áo lót), Counterpain (gel giảm đau chấn thương), NeoCell (Thực phẩm chức năng, thuốc bổ, vitamin), Parker (bút viết), TORKU (bánh quy), TRIM ION (máy lọc nước), DANISA (bánh quy), Dermatix (thuốc chống sẹo), SALONPAS (cao dán giảm đau), BENTO (snack mực), NINE WEST (giày), KOHLER (bồn cầu, thiết bị vệ sinh), DAIKIN (điều hòa), MSI (laptop, PC), INDEX (mũ bảo hiểm), PETRONAS (bình gas), Vĩnh Tường, Saint-Gobain (trần thạch cao, vật liệu xây dựng), Shinmaywa (máy bơm), NEPLUS (kim khâu), Charles & Keith, C&K, Pedro (túi xách, giày dép, hàng thời trang), HAZZYS (thời trang), Penetron (vật liệu chống thấm), Lock & Lock (đồ gia dụng), Vinda (giấy ăn- tissues), Bridgestone (lốp xe)"]], "note": ""}, {"stt": 42, "name": "Công ty TNHH Blum Việt Nam", "contact": "Ngọc", "phones": ["0917.020.348"], "groups": [["", "Blum"]], "note": ""}, {"stt": 43, "name": "Công ty Luật TNHH Legos", "contact": "Giang", "phones": ["0981.241.946"], "groups": [["", "YONEX"]], "note": ""}];
+const KEY='tm_data_v1', openIds=new Set();
+let DATA=null;
+const clone=o=>JSON.parse(JSON.stringify(o));
+function validData(o){return Array.isArray(o)&&o.every(r=>r&&typeof r.name==='string'&&Array.isArray(r.phones)&&Array.isArray(r.groups)&&r.groups.every(g=>Array.isArray(g)&&typeof g[1]==='string'))}
+function normalize(a){a.forEach(r=>{r.contact=String(r.contact||'');r.note=String(r.note||'');r.phones=r.phones.map(String);r.groups=r.groups.map(g=>[String(g[0]||''),String(g[1]||'')])});return a}
+try{const s=localStorage.getItem(KEY);const o=s&&JSON.parse(s);if(validData(o))DATA=normalize(o)}catch(e){}
+if(!DATA)DATA=normalize(clone(DEFAULT_DATA));
+const PKEY='tm_portals_v1';
+const DEFAULT_PORTALS=[
+ {id:'p1',name:'WIPO Publish – Cục Sở hữu trí tuệ',desc:'Nhãn hiệu nộp đơn/đăng ký tại Việt Nam',url:'http://wipopublish.noip.gov.vn/wopublish-search/public/trademarks?1&query=*:*'},
+ {id:'p2',name:'WIPO Global Brand Database',desc:'Nhãn hiệu toàn cầu, có dữ liệu Việt Nam',url:'https://branddb.wipo.int/en'},
+ {id:'p3',name:'ASEAN TMview',desc:'Nhãn hiệu các nước ASEAN, có dữ liệu Việt Nam',url:'http://www.asean-tmview.org/tmview/welcome'},
+ {id:'p4',name:'Cổng thông tin Cục Sở hữu trí tuệ',desc:'Trang chủ và hướng dẫn tra cứu chính thức',url:'https://ipvietnam.gov.vn/'}
+];
+function validPortals(o){return Array.isArray(o)&&o.every(x=>x&&typeof x.name==='string'&&typeof x.url==='string')}
+function normPortals(a){return a.filter(x=>/^https?:\/\//i.test(String(x.url).trim())).map((x,i)=>({id:String(x.id||('p'+Date.now()+'_'+i)),name:String(x.name),desc:String(x.desc||''),url:String(x.url).trim()}))}
+let PORTALS=null;
+try{const s=localStorage.getItem(PKEY);const o=s&&JSON.parse(s);if(validPortals(o))PORTALS=normPortals(o)}catch(e){}
+if(!PORTALS)PORTALS=normPortals(clone(DEFAULT_PORTALS));
+const serAll=()=>JSON.stringify({data:DATA,portals:PORTALS},(k,v)=>k[0]==='_'?undefined:v);
+const ser=()=>JSON.stringify(DATA,(k,v)=>k[0]==='_'?undefined:v);
+let warned=false,skipOnce=false;
+function save(){if(skipOnce){skipOnce=false;return}try{localStorage.setItem('tm_upd',new Date().toLocaleDateString('vi-VN'))}catch(e){}try{localStorage.setItem(KEY,ser());localStorage.setItem(PKEY,JSON.stringify(PORTALS))}catch(e){if(!warned){warned=true;toast('Máy không cho lưu: thay đổi chỉ giữ đến khi đóng app')}}}
+const $ = s => document.querySelector(s);
+const norm = s => s.replace(/đ/g,'d').replace(/Đ/g,'D').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+const sq = s => norm(s).replace(/[^a-z0-9]+/g,'');
+const esc = s => s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* chuẩn hóa từng ký tự để giữ nguyên vị trí khi tô sáng */
+function hl(text,q){
+  const k=q?sq(q):''; if(!k) return esc(text);
+  const ch=[...text]; let flat='',idx=[];
+  ch.forEach((c,i)=>{for(const x of norm(c)){if(/[a-z0-9]/.test(x)){flat+=x;idx.push(i)}}});
+  let out='',pos=0,s=0,i;
+  while((i=flat.indexOf(k,s))>-1){const a=idx[i],b=idx[i+k.length-1]+1;if(a<pos){s=i+1;continue}
+    out+=esc(ch.slice(pos,a).join(''))+'<mark>'+esc(ch.slice(a,b).join(''))+'</mark>';pos=b;s=i+k.length}
+  return out+esc(ch.slice(pos).join(''));
+}
+
+/* chỉ mục gợi ý nhãn hiệu */
+const PRE=/^(bao gồm các thương hiệu|bao gồm|có các thương hiệu như|có các thương hiệu|gồm các thương hiệu|có thương hiệu)\s+/i;
+const CATS=[['Thuốc lá',/thuoc la|thuoc dieu/],['Đồng hồ, trang sức',/dong ho|trang suc/],['Kính mắt',/kinh/],['Mỹ phẩm, chăm sóc cá nhân',/my pham|nuoc hoa|cham soc|ve sinh|dau goi|sua tam|kem danh rang|dao cao/],['Dược phẩm, thực phẩm chức năng',/duoc pham|duoc my|y te|thuc pham chuc nang|tpcn|dinh duong|thuoc(?! la)/],['Thực phẩm, đồ uống',/thuc pham|do an|do uong|nuoc giai khat|ruou|\bbia\b|ca phe|banh|keo\b/],['Thời trang, phụ kiện',/thoi trang|quan ao|giay|dep\b|\btui|\bvi\b|bop|phu kien|ba lo|vali|day lung/],['Điện tử, gia dụng',/dien tu|dien thoai|gia dung|thiet bi dien|may tinh|\bloa\b|tai nghe|muc in|noi that|do dien/],['Ô tô, xe máy, phụ tùng',/o to|xe may|xe dap|phu tung|\blop\b|dong co|vong bi|nhot|nhien lieu/],['Công nghiệp, xây dựng',/cong nghiep|xay dung|vat lieu|\bson\b|hoa chat|dung cu|co khi|thang may/],['Đồ chơi, văn phòng phẩm',/do choi|van phong/],['Thể thao, giải trí',/the thao|golf|giai tri/]];
+let catF='',catList=[];
+const catOf=g=>{const s=norm(g[0]||g[1].slice(0,400));return CATS.filter(c=>c[1].test(s)).map(c=>c[0])};
+let sugList=[];
+function prep(){
+  const m=new Map();
+  DATA.forEach((r,i)=>{
+    if(!r.id)r.id='r'+(r.stt||0)+'_'+i;
+    r._n=sq(r.name+' '+r.contact+' '+r.phones.join(' '));
+    r.groups.forEach(g=>{
+      g._n=sq(g[0]+' '+g[1]);g._c=catOf(g);
+      g[1].split(/[;,()]+/).forEach(x=>{
+        x=x.trim().replace(PRE,'').replace(/\.$/,'');
+        if(x.length>=2&&x.length<=28&&!/^(v\.v|\d+)$/i.test(x)){const k=norm(x);if(!m.has(k))m.set(k,x)}
+      });
+    });
+  });
+  sugList=[...m.entries()];
+  catList=CATS.map(c=>c[0]).filter(c=>DATA.some(r=>r.groups.some(g=>g._c.includes(c))));
+}
+prep();
+
+function phoneBtns(r){
+  return '<div class="phones">'+r.phones.map(p=>{
+    const d=p.replace(/[^\d+]/g,'');
+    return `<div class="pr"><a href="tel:${d}" data-call="Gọi" data-id="${r.id}" data-ph="${esc(p)}">Gọi ${esc(p)}</a>${/^0[35789]\d{8}$/.test(d.replace(/^\+?84/,'0'))?`<a class="zl" href="https://zalo.me/${d.replace(/^\+?84/,'0')}" target="_blank" rel="noopener" data-call="Zalo" data-id="${r.id}" data-ph="${esc(p)}">Zalo</a>`:''}<button data-copy="${d}" aria-label="Sao chép ${esc(p)}">Sao chép</button></div>`;
+  }).join('')+'</div>';
+}
+function repCard(r,q,mode){
+  const nq=q?sq(q):'', edit=tab===2&&isAdmin();
+  const hitG=[],restG=[];
+  r.groups.forEach(g=>(((nq&&g._n.includes(nq))||(!nq&&catF))&&(!catF||g._c.includes(catF))?hitG:restG).push(g));
+  const gh=g=>{const gi=r.groups.indexOf(g);
+    return `<div class="grp${hitG.includes(g)?' hit':''}">${g[0]?'<b>'+hl(g[0],q)+'</b>':''}${hl(g[1],q)}${edit?`<div class="acts"><button type="button" data-act="eg" data-id="${r.id}" data-gi="${gi}">Sửa</button><button type="button" class="del" data-act="dg" data-id="${r.id}" data-gi="${gi}">Xóa</button></div>`:''}</div>`};
+  const addG=edit?`<div class="acts"><button type="button" data-act="ag" data-id="${r.id}">Thêm nhóm nhãn hiệu</button></div>`:'';
+  const op=edit&&openIds.has(r.id)?' open':'';
+  let body='';
+  if(mode==='search'){
+    body=hitG.map(gh).join('');
+    if(restG.length||edit) body+=`<details data-id="${r.id}"${op}><summary>Xem toàn bộ nhãn hiệu của đơn vị này</summary>${restG.map(gh).join('')}${addG}</details>`;
+    if(!hitG.length) body=r.groups.map(gh).join('')+addG;
+  } else {
+    body=`<details data-id="${r.id}"${op}><summary>Danh sách nhãn hiệu (${r.groups.length} nhóm)</summary>${r.groups.map(gh).join('')}${addG}</details>`;
+  }
+  const top=`<div class="acts top"><button type="button" data-act="cp" data-id="${r.id}">Sao chép thông tin</button><button type="button" data-act="mn" data-id="${r.id}">Mẫu biên bản</button><button type="button" data-act="sh" data-id="${r.id}">Chia sẻ</button><button type="button" data-act="mm" data-id="${r.id}">Ghi chú riêng</button>${getLog(r).length?`<button type="button" data-act="lg" data-id="${r.id}">Nhật ký liên hệ</button>`:''}<button type="button" data-act="pn" data-id="${r.id}">${pins().includes(r.id)?'Bỏ ghim':'Ghim'}</button>${edit?`<button type="button" data-act="er" data-id="${r.id}">Sửa thông tin</button><button type="button" class="del" data-act="dr" data-id="${r.id}">Xóa đại diện</button>`:''}</div>`;
+  return `<article class="rep"><h2>${hl(r.name,q)}</h2>
+  <p class="who">STT ${esc(String(r.stt||''))}${r.contact?' · Liên hệ: '+hl(r.contact,q):''}</p>
+  ${r.note?`<p class="note">${esc(r.note)}</p>`:''}${phoneBtns(r)}${(()=>{const L=getLog(r),x=L[L.length-1];return x?'<p class="hint2">Liên hệ gần nhất: '+esc(new Date(x.t).toLocaleString('vi-VN'))+' ('+esc(x.k)+')</p>':''})()}${getMemo(r)?'<div class="grp"><b>Ghi chú riêng</b>'+esc(getMemo(r))+'</div>':''}${top}${body}</article>`;
+}
+
+
+function portals(q,intro){
+  return `<section class="portals"><h3>Tra cứu trên cổng chính thức</h3><p>${intro||'Danh sách trong app chỉ cho biết đơn vị đại diện. Muốn kiểm tra tình trạng bảo hộ, chủ sở hữu, nhóm hàng… hãy tra trên các cổng sau.'}${q?' Từ khóa “'+esc(q)+'” sẽ được sao chép để bạn dán vào ô tìm kiếm.':''}</p>`+
+   PORTALS.map(x=>`<div class="pl"><a href="${esc(x.url)}" target="_blank" rel="noopener" data-portal="1">${esc(x.name)}${x.desc?'<small>'+esc(x.desc)+'</small>':''}</a>${isAdmin()?`<div class="acts"><button type="button" data-act="ep" data-id="${esc(x.id)}">Sửa</button><button type="button" class="del" data-act="dp" data-id="${esc(x.id)}">Xóa</button></div>`:''}</div>`).join('')+
+   (isAdmin()?`<div class="acts"><button type="button" data-act="np">Thêm liên kết</button></div>`:'')+`</section>`;
+}
+let tab=1;
+function render(){
+  const q=$('#q').value.trim(), nq=sq(q);
+  $('#clr').style.display=q?'block':'none';
+  const home=$('#home'), list=$('#list'), count=$('#count');
+  const ph=$('#portalsHome'), pr=$('#portalsRes'); ph.innerHTML=''; pr.innerHTML=''; $('#tools').style.display=(tab===2&&isAdmin())?'flex':'none';
+  $('#cats').style.display=tab===3?'none':'flex';$('#cats').innerHTML=tab===3?'':catList.map((c,i)=>`<button type="button" data-act="ct" data-id="${i}" aria-pressed="${catF===c}">${esc(c)}</button>`).join('');
+  const ut=$('#util');ut.style.display=tab===3?'block':'none';if(tab===3){home.style.display='none';list.innerHTML='';count.textContent='';ut.innerHTML=utilHTML();return}
+  if(tab===2){
+    home.style.display='none';
+    const rs=pinSort(DATA.filter(r=>mr(r,nq)));
+    count.textContent=rs.length+' đơn vị đại diện';
+    list.innerHTML=rs.map(r=>repCard(r,q,(nq||catF)?'search':'all')).join('')||'<p class="empty">Không có đơn vị nào khớp.</p>';
+    return;
+  }
+  if(!nq&&!catF){home.style.display='';count.textContent='';list.innerHTML='';ph.innerHTML=portals('');$('#homeX').innerHTML=homeX();return}
+  home.style.display='none';
+  const rs=pinSort(DATA.filter(r=>mr(r,nq)));
+  if(!rs.length){count.textContent='';list.innerHTML=`<p class="empty"><b>Không tìm thấy “${esc(q)}”</b><br>Nhãn hiệu này chưa có trong danh sách đại diện. Thử gõ ngắn hơn hoặc không dấu, hoặc tra trên các cổng chính thức bên dưới.</p>`;pr.innerHTML=portals(q,'Nhãn hiệu có thể vẫn được bảo hộ nhưng chưa có đại diện trong danh sách này.');return}
+  count.textContent=rs.length+' đơn vị đại diện có liên quan';
+  list.innerHTML=rs.map(r=>repCard(r,q,'search')).join('');
+  pr.innerHTML=portals(q);
+}
+function suggest(){
+  const nq=norm($('#q').value.trim()), box=$('#sug');
+  if(nq.length<1||tab!==1){box.style.display='none';return}
+  const m=[];for(const [k,v] of sugList){if(k.startsWith(nq)){m.push(v)}if(m.length>=6)break}
+  if(m.length<6)for(const [k,v] of sugList){if(!k.startsWith(nq)&&k.includes(nq)&&!m.includes(v)){m.push(v)}if(m.length>=6)break}
+  box.innerHTML=m.map(v=>`<button type="button">${esc(v)}</button>`).join('');
+  box.style.display=m.length?'block':'none';
+}
+function setTab(n){tab=n;$('#t1').setAttribute('aria-pressed',n===1);$('#t2').setAttribute('aria-pressed',n===2);$('#t3').setAttribute('aria-pressed',n===3);$('#sug').style.display='none';render()}
+function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');setTimeout(()=>e.classList.remove('on'),1600)}
+function copy(t){
+  const done=()=>toast('Đã sao chép '+t);
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(done,fb)}else fb();
+  function fb(){const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();try{document.execCommand('copy');done()}catch(e){toast('Không sao chép được')}a.remove()}
+}
+let rt;$('#q').addEventListener('input',()=>{render();suggest();clearTimeout(rt);rt=setTimeout(()=>{const v=$('#q').value.trim();if(v.length>=2&&tab===1&&$('#list').innerHTML.indexOf('class="rep"')>=0)addRecent(v)},1500)});
+$('#clr').addEventListener('click',()=>{$('#q').value='';render();suggest();$('#q').focus()});
+$('#sug').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;$('#q').value=b.textContent;$('#sug').style.display='none';render()});
+document.addEventListener('click',e=>{if(!e.target.closest('.sb'))$('#sug').style.display='none';const c=e.target.closest('[data-copy]');if(c)copy(c.dataset.copy);if(e.target.closest('[data-portal]')){const v=$('#q').value.trim();if(v)copy(v)}});
+
+/* ===== Thêm / sửa / xóa ===== */
+function closeModal(){const o=$('#ov');o.classList.remove('on');o.innerHTML=''}
+function commit(){if(!isAdmin()){render();return}prep();save();histDiff();render();if(pendingUndo){showUndo('Đã xóa: '+pendingUndo.slice(0,40));pendingUndo=''}}
+function modal(title,fields,onSave,okLabel,allow){
+  if(!allow&&!isAdmin()){toast('Chức năng này chỉ dành cho tài khoản quản trị.');return}
+  const o=$('#ov');
+  o.innerHTML=`<div class="md" role="dialog" aria-modal="true"><h3>${esc(title)}</h3>`+fields.map((f,i)=>
+    `<label for="f${i}">${esc(f.label)}</label>`+(f.area?`<textarea id="f${i}" placeholder="${esc(f.ph||'')}">${esc(f.value||'')}</textarea>`:`<input id="f${i}" ${f.pw?('type="password" autocomplete="off"'+(f.pw===1?' inputmode="numeric"':'')):'type="text"'} value="${esc(f.value||'')}" placeholder="${esc(f.ph||'')}">`)+(f.hint?`<div class="hint2">${esc(f.hint)}</div>`:'')).join('')+
+    `<div class="err" id="err"></div><div class="row"><button type="button" id="mc">Hủy</button><button type="button" class="ok" id="ms">${okLabel||'Lưu'}</button></div></div>`;
+  o.classList.add('on');
+  $('#mc').onclick=closeModal;
+  $('#ms').onclick=()=>{const err=onSave(fields.map((f,i)=>$('#f'+i).value));if(err){$('#err').textContent=err;return}closeModal();commit()};
+  const f0=$('#f0');if(f0)f0.focus();
+}
+function ask(title,msg,okLabel,fn){
+  if(!isAdmin()){toast('Chức năng này chỉ dành cho tài khoản quản trị.');return}
+  const o=$('#ov');
+  o.innerHTML=`<div class="md" role="dialog" aria-modal="true"><h3>${esc(title)}</h3><p>${esc(msg)}</p><div class="row"><button type="button" id="mc">Hủy</button><button type="button" class="ok del" id="ms">${okLabel}</button></div></div>`;
+  o.classList.add('on');
+  $('#mc').onclick=closeModal;
+  $('#ms').onclick=()=>{fn();closeModal();commit()};
+}
+let dupOk='',dupB='',phWarn='';
+function formRep(r){dupOk='';phWarn='';
+  const f=[
+    {label:'Tên đơn vị đại diện',value:r?r.name:'',ph:'Ví dụ: Công ty Luật TNHH ABC'},
+    {label:'Người liên hệ',value:r?r.contact:'',ph:'Ví dụ: Nguyễn Văn A'},
+    {label:'Số điện thoại',area:1,value:r?r.phones.join('\n'):'',ph:'Mỗi số một dòng',hint:'Mỗi số điện thoại một dòng.'},
+    {label:'Ghi chú (nếu có)',value:r?r.note:'',ph:'Ví dụ: Liên hệ trước khi kiểm tra'}
+  ];
+  if(!r){f.push({label:'Ngành hàng đầu tiên (không bắt buộc)',ph:'Ví dụ: Thời trang'},{label:'Nhãn hiệu của ngành hàng đó (không bắt buộc)',area:1,ph:'Ví dụ: GUCCI, PRADA, CHANEL'})}
+  modal(r?'Sửa thông tin đại diện':'Thêm đại diện',f,v=>{
+    const name=v[0].trim();if(!name)return 'Vui lòng nhập tên đơn vị đại diện.';
+    if(!r){const d=DATA.find(x=>sq(x.name)===sq(name));if(d&&dupOk!==sq(name)){dupOk=sq(name);return 'Đã có đơn vị trùng tên (STT '+d.stt+'). Bấm Lưu lần nữa nếu vẫn muốn thêm.'}}
+    const phones=v[2].split(/[\n;]+/).map(s=>s.trim()).filter(Boolean);
+    const badP=phones.filter(x=>{const d=x.replace(/\D/g,'');return d.length<9||d.length>12});if(badP.length&&phWarn!==badP.join()){phWarn=badP.join();return 'Số điện thoại “'+badP[0]+'” có vẻ sai độ dài. Bấm Lưu lần nữa nếu số này đúng.'}
+    if(r){r.name=name;r.contact=v[1].trim();r.phones=phones;r.note=v[3].trim();return null}
+    const id='r'+Date.now();
+    const n={id,stt:Math.max(0,...DATA.map(x=>+x.stt||0))+1,name,contact:v[1].trim(),phones,note:v[3].trim(),groups:[]};
+    if(v[5].trim())n.groups.push([v[4].trim(),v[5].trim()]);
+    DATA.push(n);openIds.add(id);return null;
+  });
+}
+function formGroup(r,gi){dupB='';
+  const g=gi>=0?r.groups[gi]:['',''];
+  modal(gi>=0?'Sửa nhóm nhãn hiệu':'Thêm nhóm nhãn hiệu',[
+    {label:'Ngành hàng (không bắt buộc)',value:g[0],ph:'Ví dụ: Đồng hồ'},
+    {label:'Danh sách nhãn hiệu',area:1,value:g[1],ph:'Ví dụ: ROLEX, CARTIER, OMEGA',hint:'Các nhãn hiệu cách nhau bằng dấu phẩy hoặc chấm phẩy.'}
+  ],v=>{
+    const txt=v[1].trim();if(!txt)return 'Vui lòng nhập ít nhất một nhãn hiệu.';
+    const ex=new Set(r.groups.filter((_,i)=>i!==gi).flatMap(g=>g[1].split(/[;,()]+/).map(sq).filter(Boolean)));const dp=txt.split(/[;,()]+/).map(s=>s.trim()).filter(s=>s&&ex.has(sq(s)));
+    if(dp.length&&dupB!==txt){dupB=txt;return 'Đã có trong đơn vị này: '+dp.slice(0,4).join(', ')+'. Bấm Lưu lần nữa nếu vẫn muốn thêm.'}
+    if(gi>=0)r.groups[gi]=[v[0].trim(),txt];else r.groups.push([v[0].trim(),txt]);
+    openIds.add(r.id);return null;
+  });
+}
+function backup(){
+  const o=$('#ov');
+  o.innerHTML=`<div class="md" role="dialog" aria-modal="true"><h3>Sao lưu / Khôi phục</h3><p class="hint2">Sao chép toàn bộ nội dung ô bên dưới và cất vào nơi an toàn (ghi chú, Zalo, email…). Muốn khôi phục, dán lại vào ô này rồi bấm “Nạp dữ liệu”.</p><textarea id="bk" style="min-height:170px">${esc(serAll())}</textarea><div class="err" id="err"></div><div class="row"><button type="button" id="b1">Sao chép</button><button type="button" class="ok" id="b2">Nạp dữ liệu</button></div><div class="row"><button type="button" class="del" id="b3">Khôi phục dữ liệu gốc</button><button type="button" id="b4">Đóng</button></div></div>`;
+  o.classList.add('on');
+  $('#b4').onclick=closeModal;
+  $('#b1').onclick=()=>{const a=$('#bk');a.select();copy(a.value)};
+  $('#b2').onclick=()=>{
+    try{let x=JSON.parse($('#bk').value),pl=null;if(x&&!Array.isArray(x)&&typeof x==='object'){pl=x.portals;x=x.data}if(!validData(x))throw 0;if(pl&&!validPortals(pl))throw 0;DATA=normalize(x);if(pl)PORTALS=normPortals(pl);closeModal();commit();toast('Đã nạp dữ liệu')}
+    catch(e){$('#err').textContent='Nội dung không hợp lệ. Hãy dán đúng bản sao lưu đã sao chép.'}
+  };
+  $('#b3').onclick=()=>ask('Khôi phục dữ liệu gốc','Toàn bộ thay đổi của bạn (đại diện, nhãn hiệu và liên kết tra cứu) sẽ bị xóa và quay về bản ban đầu. Bạn chắc chắn chứ?','Khôi phục',()=>{DATA=normalize(clone(DEFAULT_DATA));openIds.clear();PORTALS=normPortals(clone(DEFAULT_PORTALS));skipOnce=true;try{localStorage.removeItem(KEY);localStorage.removeItem(PKEY);localStorage.removeItem('tm_upd')}catch(e){}});
+}
+function formPortal(x){
+  modal(x?'Sửa liên kết tra cứu':'Thêm liên kết tra cứu',[
+    {label:'Tên cổng tra cứu',value:x?x.name:'',ph:'Ví dụ: WIPO Global Brand Database'},
+    {label:'Mô tả ngắn (không bắt buộc)',value:x?x.desc:'',ph:'Ví dụ: Nhãn hiệu toàn cầu'},
+    {label:'Địa chỉ liên kết',value:x?x.url:'',ph:'https://...',hint:'Địa chỉ bắt đầu bằng http:// hoặc https://'}
+  ],v=>{
+    const name=v[0].trim();if(!name)return 'Vui lòng nhập tên cổng tra cứu.';
+    let u=v[2].trim();if(!u)return 'Vui lòng nhập địa chỉ liên kết.';
+    if(!/^https?:\/\//i.test(u))u='https://'+u;
+    try{const o=new URL(u);if(o.hostname.indexOf('.')<0)throw 0}catch(e){return 'Địa chỉ liên kết không hợp lệ.'}
+    if(x){x.name=name;x.desc=v[1].trim();x.url=u}else PORTALS.push({id:'p'+Date.now(),name,desc:v[1].trim(),url:u});
+    return null;
+  });
+}
+function act0(a,id,gi){
+  if(a==='ar')return formRep(null);
+  if(a==='bk')return backup();
+  if(a==='np')return formPortal(null);
+  if(a==='tr'||a==='td'||a==='te')return trashAct(a,id);
+  if(a==='mm'){const r=DATA.find(x=>x.id===id);return r&&formMemo(r)}
+  if(a==='ep'||a==='dp'){
+    const x=PORTALS.find(y=>y.id===id);if(!x)return;
+    if(a==='ep')return formPortal(x);
+    return ask('Xóa liên kết','Xóa liên kết “'+x.name+'”?','Xóa',()=>{trash('por',x);PORTALS=PORTALS.filter(y=>y!==x)});
+  }
+  const r=DATA.find(x=>x.id===id);if(!r)return;
+  if(a==='er')formRep(r);
+  else if(a==='dr')ask('Xóa đại diện','Xóa “'+r.name+'” cùng toàn bộ danh sách nhãn hiệu của đơn vị này?','Xóa',()=>{trash('rep',r);DATA=DATA.filter(x=>x!==r)});
+  else if(a==='ag')formGroup(r,-1);
+  else if(a==='eg')formGroup(r,gi);
+  else if(a==='dg')ask('Xóa nhóm nhãn hiệu','Xóa nhóm “'+(r.groups[gi][0]||'Nhãn hiệu')+'”?','Xóa',()=>{trash('grp',r.groups[gi],r.id);r.groups.splice(gi,1)});
+}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(b)act(b.dataset.act,b.dataset.id,parseInt(b.dataset.gi,10))});
+document.addEventListener('toggle',e=>{const d=e.target;if(d.tagName==='DETAILS'&&d.dataset&&d.dataset.id){d.open?openIds.add(d.dataset.id):openIds.delete(d.dataset.id)}},true);
+
+/* ===== PIN, cỡ chữ, sao chép, nhập file ===== */
+const PINK='tm_pin_v1',FK='tm_font_v1',QK='tm_q_v1',AK='tm_a_v1',SKIPK='tm_nopw_v1';let unlocked=0;
+const ls=(k,v)=>{try{if(v===undefined)return localStorage.getItem(k);if(v===null)localStorage.removeItem(k);else localStorage.setItem(k,v)}catch(e){return null}};
+const hp=s=>{let h=5381;for(const c of 'tm'+s)h=((h<<5)+h+c.charCodeAt(0))>>>0;return String(h)};
+function guard(fn){if(isAdmin())return fn();toast('Chức năng này chỉ dành cho tài khoản quản trị.')}
+function pwCheck(p,p2,q,a){if(p.length<4)return 'Mật khẩu cần từ 4 ký tự.';if(p!==p2)return 'Hai lần nhập mật khẩu chưa giống nhau.';if(!q)return 'Vui lòng nhập câu hỏi bảo mật.';if(!a)return 'Vui lòng nhập câu trả lời.';return ''}
+function pwSave(p,q,a){ls(PINK,hp(p));ls(QK,q);ls(AK,hp(sq(a)));ls(SKIPK,null)}
+function setPin(){modal(ls(PINK)?'Đổi mật khẩu':'Đặt mật khẩu',[{label:'Mật khẩu mới (từ 4 ký tự)',pw:1},{label:'Nhập lại mật khẩu',pw:1},{label:'Câu hỏi bảo mật',ph:'Ví dụ: Tên trường tiểu học của bạn?'},{label:'Câu trả lời'}],v=>{
+  const e=pwCheck(v[0].trim(),v[1].trim(),v[2].trim(),v[3].trim());if(e)return e;pwSave(v[0].trim(),v[2].trim(),v[3].trim());unlocked=Infinity;return null})}
+function applyFont(){const f=parseInt(ls(FK)||'100',10),s=document.documentElement.style;if(s.setProperty)s.setProperty('--fs',String(f/100));else s.fontSize=f+'%'}
+function repText(id){
+  const r=DATA.find(x=>x.id===id);if(!r)return;const k=sq($('#q').value);
+  const gs=(k?r.groups.filter(g=>g._n.includes(k)):[]);const use=gs.length?gs:r.groups;
+  return ([r.name,r.contact?'Liên hệ: '+r.contact:'',r.phones.length?'ĐT: '+r.phones.join(', '):'',r.note].filter(Boolean).concat(use.map(g=>(g[0]?g[0]+': ':'')+g[1])).join('\n'));
+}
+function act(a,id,gi){
+  if(a==='cp')return copyRep(id);
+  if(a==='bioon')return bioEnroll();
+  if(a==='biooff'){ls('tm_bio',null);return render()}
+  if(a==='mn')return copyMinute(id);
+  if(a==='pn'){const P=pins();ls('tm_pins',JSON.stringify(P.includes(id)?P.filter(x=>x!==id):P.concat(id)));return render()}
+  if(a==='ct'){catF=catF===catList[+id]?'':catList[+id];return render()}
+  if(a==='rc'){$('#q').value=jget('tm_recent',[])[+id]||'';return render()}
+  if(a==='clr'){ls('tm_recent',null);return render()}
+  if(a==='chk')return checkData();
+  if(a==='sh')return shareRep(id);
+  if(a==='hs')return showHist();
+  if(a==='lg'){const r=DATA.find(x=>x.id===id);return r&&showLog(r)}
+  if(a==='onb')return showOnb(0);
+  if(a==='ws')return webInfo(+id);
+  if(a==='ow'){scanBrands=[{name:id}];return showScan('')}
+  if(a==='cam')return openCam();
+  if(a==='delkey'){ls(AKEY,null);return render()}
+  if(a==='key')return guard(keyForm);
+  if(a==='okey')return guard(okeyForm);
+  if(a==='fs'){let f=parseInt(ls(FK)||'100',10);f=id==='+'?Math.min(150,f+10):id==='-'?Math.max(80,f-10):100;ls(FK,String(f));applyFont();return render()}
+  if(a==='lock')return logout();
+  if(a==='mk')return guard(cfgForm);
+  if(a==='pwc')return guard(pwForm);
+  if(a==='pwr')return guard(()=>ask('Khôi phục mật khẩu gốc','Các mật khẩu đã đổi trong app trên máy này sẽ quay về mật khẩu gốc trong file app.','Khôi phục',()=>{ls('tm_acc_ov',null)}));
+  if(a==='pin')return guard(setPin);
+  if(a==='unpin')return guard(()=>ask('Xóa mật khẩu','Sau khi xóa, ai mở app cũng xem, sửa và xóa được dữ liệu.','Xóa mật khẩu',()=>{ls(PINK,null);ls(QK,null);ls(AK,null);ls(SKIPK,'1')}));
+  if(a==='mm'||isAdmin())return act0(a,id,gi);
+  toast('Chức năng này chỉ dành cho tài khoản quản trị.');
+}
+const ugo=id=>(openIds.has(id)||id==='ug1'||(id==='ug2'&&scanHTML))?' open':'';
+function utilHTML(){let h=utilHTML0();if(!isAdmin()){h=h.replace(/<details class="ug" data-id="ug3"[\s\S]*?<\/details>/,'').replace(/<button type="button" data-act="key">[\s\S]*?<\/button>/,'').replace(/<button type="button" data-act="okey">[\s\S]*?<\/button>/,'').replace(/<button type="button" class="del" data-act="delkey">[\s\S]*?<\/button>/,'')}return h}
+function utilHTML0(){
+  const pin=!!ls(PINK),n=DATA.reduce((s,r)=>s+r.groups.length,0);
+  return `<div class="util"><details class="ug" data-id="ug1"${ugo('ug1')}><summary>Giao diện và bảo mật</summary><section class="portals"><h3>Cỡ chữ</h3><p>Hiện tại: ${parseInt(ls(FK)||'100',10)}%</p><div class="acts"><button type="button" data-act="fs" data-id="-">Nhỏ lại</button><button type="button" data-act="fs" data-id="0">Mặc định</button><button type="button" data-act="fs" data-id="+">Lớn hơn</button></div></section>
+  ${accHTML()}
+  </details><details class="ug" data-id="ug2"${ugo('ug2')}><summary>Quét ảnh nhãn hiệu</summary><section class="portals"><h3>Quét ảnh nhãn hiệu</h3><p>Chụp hoặc chọn ảnh sản phẩm. Không cần khóa API: app tự đọc chữ trên ảnh rồi đối chiếu danh sách đại diện (lần đầu cần mạng để tải bộ đọc chữ). Nếu nhập khóa API Anthropic (${ls(AKEY)?'đã lưu':'chưa nhập'}), app nhận dạng tốt hơn, cả logo, và tìm thêm được trên mạng.</p><div class="acts"><button type="button" data-act="key">${ls(AKEY)?'Đổi khóa API':'Nhập khóa API (không bắt buộc)'}</button><button type="button" data-act="okey">${ls(OKEY)?'Đổi':'Nhập'} khóa OCR.space (miễn phí)</button>${ls(AKEY)?'<button type="button" class="del" data-act="delkey">Xóa khóa</button>':''}</div><label class="fbtn">Chụp ảnh bằng camera máy<input type="file" id="si" accept="image/*" capture="environment" hidden></label><label class="fbtn fb2">Chọn ảnh có sẵn trong máy<input type="file" id="sg" accept="image/*" hidden></label><button type="button" class="fbtn fb2" data-act="cam">Mở camera ngay trong app</button><p class="hint2">Nếu một cách không mở được trên máy của bạn, hãy thử cách còn lại. Ảnh nên chụp gần, rõ nét, đủ sáng, thấy rõ tên hoặc logo.</p><div id="scanOut">${scanHTML}</div></section>
+  </details><details class="ug" data-id="ug3"${ugo('ug3')}><summary>Quản lý dữ liệu</summary><section class="portals"><h3>Tải danh sách từ file Word / Excel</h3><p>Chọn file .docx hoặc .xlsx có các cột: Stt, Đại diện, Liên hệ, Số điện thoại, Nhãn hiệu. App sẽ cho xem trước rồi mới nhập. File .doc hoặc .xls cũ cần lưu lại thành .docx hoặc .xlsx.</p><label class="fbtn">Chọn file để tải lên<input type="file" id="fi" accept=".docx,.xlsx" hidden></label></section>
+  ${trashHTML()}
+  <section class="portals"><h3>Nhật ký thay đổi</h3><p>Xem lại các lần thêm, sửa, xóa trên máy này.</p><div class="acts"><button type="button" data-act="hs">Xem nhật ký thay đổi</button></div></section>
+  <section class="portals"><h3>Kiểm tra chất lượng dữ liệu</h3><p>Tìm số điện thoại sai độ dài, đại diện thiếu số hoặc nhãn hiệu, tên trùng, nhãn hiệu bị lặp. ${esc(updTxt())}.</p><div class="acts"><button type="button" data-act="chk">Kiểm tra dữ liệu</button><button type="button" data-act="onb">Xem lại hướng dẫn đầu tiên</button></div></section>
+  <section class="portals"><h3>Sao lưu / Khôi phục</h3><div class="acts"><button type="button" data-act="bk">Mở sao lưu / khôi phục</button></div></section>
+  </details><details class="ug" data-id="ug4"${ugo('ug4')}><summary>Quyền riêng tư, hướng dẫn và giới thiệu</summary><section class="portals"><h3>Quyền riêng tư</h3><p>Danh sách, chỉnh sửa và mật khẩu chỉ lưu trên máy này. Ảnh chỉ được gửi ra ngoài khi bạn bấm quét và dùng dịch vụ đọc chữ trực tuyến (OCR.space) hoặc khóa API Anthropic.</p></section>
+    <section class="portals"><h3>Hướng dẫn nhanh</h3><p>Tab Tra cứu: gõ nhãn hiệu, tên công ty, người liên hệ hoặc số điện thoại, có thể gõ không dấu, không cách, không gạch nối (ví dụ “y3” ra “Y-3”).</p><p>Tab Tất cả đại diện: thêm, sửa, xóa đại diện, nhóm nhãn hiệu. Nút “Sao chép thông tin” giúp dán nhanh vào Zalo hoặc biên bản.</p></section>
+  <section class="portals"><h3>Giới thiệu</h3><p>Tác giả: Nguyễn Văn Hảo</p><p>SĐT: <a href="tel:0913294532">0913294532</a></p><p>Chi cục Quản lý thị trường tỉnh Hà Tĩnh</p><p>Email: <a href="mailto:haonguyencoe@gmail.com">haonguyencoe@gmail.com</a></p><p>Phiên bản ${APP_VER} (${APP_DATE})</p><p>Hiện có ${DATA.length} đại diện, ${n} nhóm nhãn hiệu, ${PORTALS.length} liên kết tra cứu.</p></section></details></div>`;
+}
+/* --- đọc docx / xlsx không cần thư viện ngoài --- */
+const dec=s=>s.replace(/&#(\d+);/g,(_,n)=>String.fromCharCode(n)).replace(/&#x([0-9a-f]+);/gi,(_,n)=>String.fromCharCode(parseInt(n,16))).replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&apos;/g,"'").replace(/&amp;/g,'&');
+async function unzip(buf){const v=new DataView(buf),u=new Uint8Array(buf);let e=u.length-22;while(e>=0&&v.getUint32(e,true)!==0x06054b50)e--;if(e<0)throw 0;
+  const n=v.getUint16(e+10,true);let p=v.getUint32(e+16,true);const o={};
+  for(let i=0;i<n;i++){const m=v.getUint16(p+10,true),cs=v.getUint32(p+20,true),nl=v.getUint16(p+28,true),el=v.getUint16(p+30,true),cl=v.getUint16(p+32,true),lo=v.getUint32(p+42,true);
+    const name=new TextDecoder().decode(u.subarray(p+46,p+46+nl));p+=46+nl+el+cl;const ds=lo+30+v.getUint16(lo+26,true)+v.getUint16(lo+28,true);o[name]={m,d:u.subarray(ds,ds+cs)}}
+  return o}
+async function inflate(f){if(!f)return '';if(f.m===0)return new TextDecoder().decode(f.d);
+  return new TextDecoder().decode(await new Response(new Blob([f.d]).stream().pipeThrough(new DecompressionStream('deflate-raw'))).arrayBuffer())}
+function docxRows(x){return (x.match(/<w:tr[ >][\s\S]*?<\/w:tr>/g)||[]).map(tr=>(tr.match(/<w:tc[ >][\s\S]*?<\/w:tc>/g)||[]).map(tc=>(tc.match(/<w:p[ >][\s\S]*?<\/w:p>/g)||[]).map(pp=>dec((pp.replace(/<w:tab\/>/g,'<w:t> </w:t>').replace(/<w:br\/>/g,'\n').match(/<w:t(?: [^>]*)?>[^<]*<\/w:t>|\n/g)||[]).map(s=>s==='\n'?s:s.replace(/<[^>]+>/g,'')).join(''))).join('\n')))}
+function xlsxRows(ss,sh){const S=(ss.match(/<si>[\s\S]*?<\/si>/g)||[]).map(si=>dec((si.match(/<t(?: [^>]*)?>[^<]*<\/t>/g)||[]).map(s=>s.replace(/<[^>]+>/g,'')).join('')));
+  return (sh.match(/<row[^>]*>[\s\S]*?<\/row>/g)||[]).map(row=>{const r=[];(row.match(/<c [^>]*?(?:\/>|>[\s\S]*?<\/c>)/g)||[]).forEach(c=>{
+    const ref=(c.match(/r="([A-Z]+)\d+"/)||[])[1]||'A';let ci=0;for(const ch of ref)ci=ci*26+ch.charCodeAt(0)-64;ci--;
+    const ty=(c.match(/ t="(\w+)"/)||[])[1],v=(c.match(/<v>([\s\S]*?)<\/v>/)||[])[1],is=(c.match(/<is>[\s\S]*?<\/is>/)||[])[0];
+    r[ci]=ty==='s'?S[+v]||'':is?dec((is.match(/<t(?: [^>]*)?>[^<]*<\/t>/g)||[]).map(s=>s.replace(/<[^>]+>/g,'')).join('')):dec(v||'')});
+    return Array.from(r,x=>x||'')})}
+function mkGroups(ls0){
+  const bal=[];ls0.map(s=>s.replace(/\s+/g,' ').replace(/^[\-–•\s']+/,'').trim()).filter(Boolean).forEach(p=>{const l=bal[bal.length-1];
+    if(l!==undefined&&(l.split('(').length>l.split(')').length||p[0]==='('))bal[bal.length-1]=l+' '+p;else bal.push(p)});
+  let note='';const ps=bal.filter(p=>/^chú ý/i.test(p)?(note=p,false):true);
+  const CAT=/^(.{2,170}?):[ ](?=[^\s,;])|^(.{2,60}):$/;
+  if(!ps.some(p=>CAT.test(p)))return{groups:ps.length?[['',ps.map(p=>p.replace(/[;,]+$/,'')).join(', ')]]:[],note};
+  const gs=[];ps.forEach(p=>{const m=p.match(CAT);if(m)gs.push([(m[1]||m[2]).trim().replace(/^\d+\.\s*/,''),m[1]?p.slice(m[0].length).trim():'']);
+    else if(gs.length)gs[gs.length-1][1]=(gs[gs.length-1][1]+' '+p).trim();else gs.push(['',p])});
+  return{groups:gs.filter(g=>g[1]),note};
+}
+function rowsToReps(rows){
+  const n=s=>norm(s||''),isH=r=>r.some(c=>n(c).includes('dai dien'))&&r.some(c=>n(c).includes('nhan hieu'));
+  let hm=null,hlen=0;
+  for(const r of rows){if(isH(r)){const k=r.map(n);hm={rep:k.findIndex(c=>c.includes('dai dien')),stt:k.findIndex(c=>c==='stt'||c==='tt'),con:k.findIndex(c=>c.includes('lien he')),ph:k.findIndex(c=>c.includes('dien thoai')||c.includes('sdt')),br:k.findIndex(c=>c.includes('nhan hieu'))};hlen=r.length;break}}
+  const out=[];
+  for(const r of rows){
+    if(!r.length||isH(r))continue;
+    let c;if(hm)c=(hm.ph<0&&hm.con>=0&&r.length>hlen)?{...hm,ph:hm.con+1,br:r.length-1}:hm;
+    else c=r.length>=5?{stt:0,rep:1,con:2,ph:3,br:4}:{stt:-1,rep:0,con:1,ph:2,br:3};
+    const g=i=>i>=0&&i<r.length?(r[i]||'').trim():'';
+    const stt=g(c.stt),name=g(c.rep),bl=g(c.br).split('\n');
+    if(!stt&&!name){if(out.length)out[out.length-1]._raw.push(...bl);continue}
+    if(!name)continue;
+    let nm='';g(c.rep).split('\n').map(s=>s.trim()).filter(Boolean).forEach(s=>{nm=!nm?s:/^(Công ty|Văn phòng)/i.test(s)?nm+' / '+s:nm+' '+s});
+    let ct='';g(c.con).split('\n').map(s=>s.trim()).filter(Boolean).forEach(s=>{ct=!ct?s:s[0]==='('?ct+' '+s:ct+' / '+s});
+    out.push({stt:parseInt(stt,10)||out.length+1,name:nm,contact:ct,phones:g(c.ph).split(/[\n;,]+/).map(s=>s.trim()).filter(Boolean),_raw:bl.slice()});
+  }
+  return out.map(r=>{const m=mkGroups(r._raw);delete r._raw;r.groups=m.groups;r.note=m.note;return r});
+}
+async function readFile(file){
+  const buf=await new Promise((ok,no)=>{const f=new FileReader();f.onload=()=>ok(f.result);f.onerror=no;f.readAsArrayBuffer(file)});
+  const nm=file.name.toLowerCase();
+  if(typeof DecompressionStream==='undefined')throw new Error('Máy này chưa hỗ trợ đọc file nén. Hãy cập nhật trình duyệt/WebView.');
+  const z=await unzip(buf);
+  if(nm.endsWith('.docx'))return rowsToReps(docxRows(await inflate(z['word/document.xml'])));
+  if(nm.endsWith('.xlsx')){const k=Object.keys(z).filter(x=>/^xl\/worksheets\/sheet\d+\.xml$/.test(x)).sort((a,b)=>parseInt(a.match(/\d+/)[0])-parseInt(b.match(/\d+/)[0]))[0];
+    return rowsToReps(xlsxRows(await inflate(z['xl/sharedStrings.xml']),await inflate(z[k])))}
+  throw new Error('Chỉ hỗ trợ file .docx và .xlsx.');
+}
+const kk=r=>sq(r.name)+'|'+sq(r.contact),fp=r=>JSON.stringify([r.phones,r.groups,r.note]);
+function diffReps(a,b){const A=new Map(a.map(r=>[kk(r),r])),B=new Map(b.map(r=>[kk(r),r]));
+  return{add:b.filter(r=>!A.has(kk(r))),del:a.filter(r=>!B.has(kk(r))),chg:b.filter(r=>A.has(kk(r))&&fp(A.get(kk(r)))!==fp(r))}}
+function diffHTML(a,b){const d=diffReps(a,b),ls8=l=>l.slice(0,8).map(r=>'<div class="grp">'+esc(r.name)+(r.contact?' ('+esc(r.contact)+')':'')+'</div>').join('')+(l.length>8?'<p class="hint2">…và '+(l.length-8)+' mục khác</p>':'');
+  return '<p>So với danh sách hiện tại: <b>'+d.add.length+'</b> thêm mới, <b>'+d.chg.length+'</b> thay đổi, <b>'+d.del.length+'</b> không còn trong file.</p>'+[['Thêm mới',d.add],['Có thay đổi',d.chg],['Không còn trong file mới',d.del]].filter(x=>x[1].length).map(x=>'<details><summary>'+x[0]+' ('+x[1].length+')</summary>'+ls8(x[1])+'</details>').join('')}
+function importPreview(reps){
+  const ng=reps.reduce((s,r)=>s+r.groups.length,0),o=$('#ov');
+  o.innerHTML=`<div class="md" role="dialog" aria-modal="true"><h3>Xem trước dữ liệu tải lên</h3><p>Đọc được <b>${reps.length}</b> đại diện và <b>${ng}</b> nhóm nhãn hiệu.</p>${diffHTML(DATA,reps)}<div class="row"><button type="button" class="ok" id="i1">Thay thế toàn bộ dữ liệu hiện tại</button></div><div class="row"><button type="button" id="i2">Chỉ thêm đơn vị chưa có</button><button type="button" id="i3">Hủy</button></div></div>`;
+  o.classList.add('on');$('#i3').onclick=closeModal;
+  const done=(list,msg)=>guard(()=>{DATA=normalize(list);openIds.clear();closeModal();commit();toast(msg)});
+  $('#i1').onclick=()=>done(reps.map(r=>({...r,id:'r'+r.stt+'_'+Math.random().toString(36).slice(2,7)})),'Đã thay thế dữ liệu');
+  $('#i2').onclick=()=>{const have=new Set(DATA.map(r=>sq(r.name)+'|'+r.phones.join(',')));let mx=Math.max(0,...DATA.map(x=>+x.stt||0));
+    const add=reps.filter(r=>!have.has(sq(r.name)+'|'+r.phones.join(','))).map(r=>({...r,stt:++mx,id:'r'+Date.now()+'_'+mx}));
+    done(DATA.concat(add),'Đã thêm '+add.length+' đơn vị mới')};
+}
+document.addEventListener('change',async e=>{
+  if(!e.target||e.target.id!=='fi'||!e.target.files||!e.target.files[0])return;
+  const f=e.target.files[0];e.target.value='';
+  try{const reps=await readFile(f);if(!reps.length)throw new Error('Không tìm thấy bảng có cột “Đại diện” và “Nhãn hiệu” trong file.');importPreview(reps)}
+  catch(err){toast(err&&err.message&&err.message.length<80?err.message:'Không đọc được file này')}
+});
+
+/* ===== Tài khoản và đăng nhập (admin / khách) ===== */
+const ACCOUNTS=[{"u": "admin", "s": "32ec9bffe2f3", "h": "4b20618bd2fa7bd64ea494739ebbd4bcf5b484db8c70fc47396e6aea0f19d8cc", "r": "admin"}, {"u": "qltt", "s": "5b5e2306c254", "h": "dc52a34712296bfa245557c7685d660b97f6b477432c10bb6e2267872efe69ea", "r": "guest"}];
+let session=null;
+const isAdmin=()=>!!session&&session.role==='admin';
+const accOv=()=>jget('tm_acc_ov',{});
+const accs=()=>{const o=accOv();return ACCOUNTS.map(a=>o[a.u]?Object.assign({},a,{s:o[a.u].s,h:o[a.u].h}):a)};
+const okPw=(u,p)=>{const a=accs().find(x=>x.u===u);return !!a&&hashPw(a.u,p,a.s)===a.h};
+const rndSalt=()=>Math.random().toString(16).slice(2,10)+Math.random().toString(16).slice(2,6);
+function sha256(msg){
+  const b=Array.from(new TextEncoder().encode(msg));
+  if(!sha256.K){const K=[],H=[];let n=2,c=0;while(c<64){let p=true;for(let i=2;i*i<=n;i++)if(n%i===0){p=false;break}if(p){if(c<8)H[c]=Math.floor((Math.pow(n,.5)%1)*4294967296);K[c]=Math.floor((Math.pow(n,1/3)%1)*4294967296);c++}n++}sha256.K=K;sha256.H=H}
+  const K=sha256.K,h=sha256.H.slice(),l=b.length*8,rr=(x,n)=>(x>>>n)|(x<<(32-n));
+  b.push(0x80);while(b.length%64!==56)b.push(0);
+  for(let i=7;i>=0;i--)b.push(i>3?0:(l>>>(i*8))&255);
+  for(let o=0;o<b.length;o+=64){
+    const w=[];for(let i=0;i<16;i++)w[i]=(b[o+4*i]<<24)|(b[o+4*i+1]<<16)|(b[o+4*i+2]<<8)|b[o+4*i+3];
+    for(let i=16;i<64;i++){const s0=rr(w[i-15],7)^rr(w[i-15],18)^(w[i-15]>>>3),s1=rr(w[i-2],17)^rr(w[i-2],19)^(w[i-2]>>>10);w[i]=(w[i-16]+s0+w[i-7]+s1)|0}
+    let [a,bb,c,d,e,f,g,hh]=h;
+    for(let i=0;i<64;i++){const S1=rr(e,6)^rr(e,11)^rr(e,25),ch=(e&f)^(~e&g),t1=(hh+S1+ch+K[i]+w[i])|0,S0=rr(a,2)^rr(a,13)^rr(a,22),mj=(a&bb)^(a&c)^(bb&c),t2=(S0+mj)|0;hh=g;g=f;f=e;e=(d+t1)|0;d=c;c=bb;bb=a;a=(t1+t2)|0}
+    [a,bb,c,d,e,f,g,hh].forEach((v,i)=>{h[i]=(h[i]+v)|0});
+  }
+  return h.map(x=>('00000000'+(x>>>0).toString(16)).slice(-8)).join('');
+}
+function hashPw(u,p,s){let h=sha256(s+':'+u+':'+p);for(let i=0;i<3000;i++)h=sha256(h+s);return h}
+let fails=0,until=0;
+function lgFail(msg){fails++;if(fails>=5){fails=0;until=Date.now()+30000;$('#lge').textContent='Nhập sai 5 lần. Vui lòng chờ 30 giây.'}else $('#lge').textContent=msg}
+function lgShow(h){const L=$('#login');L.style.display='block';L.innerHTML=`<div class="lgw"><div class="ttl lgt"><span class="t1">TRA CỨU NHÃN HIỆU</span><span class="t2">ĐẠI DIỆN CHỦ THỂ QUYỀN</span></div><div class="lgc">${h}</div><p class="lgf">Tác giả Nguyễn Văn Hảo<br>Chi cục Quản lý thị trường tỉnh Hà Tĩnh<br>Phiên bản ${APP_VER}</p></div>`}
+function lgOpen(acc){session={u:acc.u,role:acc.r};unlocked=Infinity;const L=$('#login');L.style.display='none';L.innerHTML='';render();if(!ls('tm_onb'))showOnb(0)}
+function logout(){session=null;unlocked=0;closeCam();lgView('login')}
+function lgView(m){
+  const err='<div class="err" id="lge"></div>';
+  if(m==='code')return codeView();
+  if(m==='forgot'){
+    lgShow('<h2>Quên mật khẩu</h2><p>Tài khoản do quản trị viên cấp, nên chỉ quản trị viên mới cấp lại được mật khẩu.</p><p><b>Nguyễn Văn Hảo</b><br>SĐT: 0913294532<br>Email: haonguyencoe@gmail.com</p><button class="lgb" id="lgk" type="button">Quay lại đăng nhập</button>');
+    $('#lgk').onclick=()=>lgView('login');return}
+  lgShow(`<h2>Đăng nhập</h2><p class="sub">Nhập tài khoản do quản trị viên cấp.</p><label for="lu">Tên đăng nhập</label><input id="lu" type="text" autocomplete="off" autocapitalize="none" value="${esc(ls('tm_lastuser')||'')}"><label for="lp">Mật khẩu</label><input id="lp" type="password" autocomplete="off">${err}<button class="lgb" id="lgo" type="button">Đăng nhập</button><div id="lgbio"></div><button class="lgl" id="lgf" type="button">Quên mật khẩu?</button><button class="lgl" id="lgc" type="button">Có mã cập nhật mật khẩu?</button>`);
+  $('#lgo').onclick=()=>{
+    if(Date.now()<until){$('#lge').textContent='Nhập sai nhiều lần. Thử lại sau '+Math.ceil((until-Date.now())/1000)+' giây.';return}
+    const u=$('#lu').value.trim().toLowerCase(),acc=accs().find(x=>x.u===u);
+    if(acc&&hashPw(acc.u,$('#lp').value,acc.s)===acc.h){fails=0;ls('tm_lastuser',acc.u);lgOpen(acc)}
+    else{fails++;if(fails>=5){fails=0;until=Date.now()+30000;$('#lge').textContent='Nhập sai 5 lần. Vui lòng chờ 30 giây.'}else $('#lge').textContent='Tên đăng nhập hoặc mật khẩu không đúng.'}
+  };
+  $('#lgf').onclick=()=>lgView('forgot');$('#lgc').onclick=()=>lgView('code');bioShow();
+}
+function startLogin(){lgView('login')}
+
+function pwForm(){modal('Đổi mật khẩu tài khoản',[
+  {label:'Tài khoản cần đổi',value:'qltt',hint:'Gõ admin để đổi mật khẩu quản trị, hoặc qltt để đổi mật khẩu khách.'},
+  {label:'Mật khẩu mới (từ 8 ký tự, có cả chữ và số)',pw:2},{label:'Nhập lại mật khẩu mới',pw:2},{label:'Mật khẩu của bạn hiện tại (để xác nhận)',pw:2}],v=>{
+  const u=v[0].trim().toLowerCase();
+  if(!accs().some(x=>x.u===u))return 'Không có tài khoản này.';
+  if(!okPw(session.u,v[3]))return 'Mật khẩu hiện tại của bạn chưa đúng.';
+  if(!/^(?=.*[A-Za-z])(?=.*\d).{8,}$/.test(v[1]))return 'Mật khẩu mới cần từ 8 ký tự, gồm cả chữ và số.';
+  if(v[1]!==v[2])return 'Hai lần nhập mật khẩu mới chưa giống nhau.';
+  const s=rndSalt(),h=hashPw(u,v[1],s),o=accOv();o[u]={s,h};ls('tm_acc_ov',JSON.stringify(o));
+  const code='TM1.'+btoa(unescape(encodeURIComponent(JSON.stringify({u,s,h}))));
+  Promise.resolve().then(()=>{const e=$('#ov');e.innerHTML='<div class="md" role="dialog" aria-modal="true"><h3>Đã đổi mật khẩu “'+esc(u)+'” trên máy này</h3><p class="hint2">Muốn máy khác cùng đổi, gửi mã cập nhật dưới đây cho người dùng (không chứa mật khẩu) và báo riêng mật khẩu mới. Họ chọn “Có mã cập nhật mật khẩu?” ở màn hình đăng nhập, nhập mật khẩu cũ và dán mã này. Máy nào không cập nhật vẫn dùng được mật khẩu cũ.</p><textarea id="cf" style="min-height:110px">'+esc(code)+'</textarea><div class="row"><button type="button" id="c1">Sao chép mã</button><button type="button" class="ok" id="c2">Đóng</button></div></div>';e.classList.add('on');$('#c1').onclick=()=>copy($('#cf').value);$('#c2').onclick=closeModal});
+  return null},'Đổi mật khẩu')}
+function codeView(){
+  lgShow(`<h2>Cập nhật mật khẩu</h2><p class="hint2">Dùng khi quản trị viên đã đổi mật khẩu và gửi mã cho bạn. Cần nhập mật khẩu hiện tại của tài khoản đó.</p><label for="cu">Tên đăng nhập</label><input id="cu" type="text" autocapitalize="none"><label for="cp0">Mật khẩu hiện tại</label><input id="cp0" type="password"><label for="cc">Mã cập nhật</label><textarea id="cc" style="min-height:90px"></textarea><div class="err" id="lge"></div><button class="lgb" id="lgo" type="button">Cập nhật mật khẩu</button><button class="lgl" id="lgk" type="button">Quay lại đăng nhập</button>`);
+  $('#lgk').onclick=()=>lgView('login');
+  $('#lgo').onclick=()=>{
+    if(Date.now()<until){$('#lge').textContent='Nhập sai nhiều lần. Thử lại sau '+Math.ceil((until-Date.now())/1000)+' giây.';return}
+    const u=$('#cu').value.trim().toLowerCase();let pl;
+    try{const c=$('#cc').value.trim();if(c.indexOf('TM1.')!==0)throw 0;pl=JSON.parse(decodeURIComponent(escape(atob(c.slice(4)))))}catch(e){$('#lge').textContent='Mã cập nhật không hợp lệ.';return}
+    if(!pl||pl.u!==u||!/^[0-9a-f]{64}$/.test(pl.h||'')||!pl.s||!accs().some(a=>a.u===u)){$('#lge').textContent='Mã này không dùng được cho tài khoản đã nhập.';return}
+    if(!okPw(u,$('#cp0').value)){lgFail('Mật khẩu hiện tại chưa đúng.');return}
+    const o=accOv();o[u]={s:pl.s,h:pl.h};ls('tm_acc_ov',JSON.stringify(o));fails=0;lgView('login');$('#lge').textContent='Đã cập nhật. Hãy đăng nhập bằng mật khẩu mới.';
+  };
+}
+
+/* ===== Đăng nhập bằng vân tay / khuôn mặt (WebAuthn, tự phát hiện hỗ trợ) ===== */
+const b64u=a=>btoa(String.fromCharCode(...new Uint8Array(a))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+const unb64u=s=>Uint8Array.from(atob(s.replace(/-/g,'+').replace(/_/g,'/')),c=>c.charCodeAt(0));
+let bioOK=false;
+async function bioCheck(){try{bioOK=!!(window.PublicKeyCredential&&navigator.credentials&&await window.PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable())}catch(e){bioOK=false}return bioOK}
+function bioShow(){bioCheck().then(ok=>{const b=jget('tm_bio',null),h=$('#lgbio');if(!h||!ok||!b)return;h.innerHTML='<button class="lgs" id="lgv" type="button">Đăng nhập bằng vân tay / khuôn mặt</button>';$('#lgv').onclick=bioLogin})}
+async function bioEnroll(){
+  if(!session)return;
+  try{
+    const cr=await navigator.credentials.create({publicKey:{challenge:crypto.getRandomValues(new Uint8Array(32)),rp:{name:'Tra cuu nhan hieu'},user:{id:crypto.getRandomValues(new Uint8Array(16)),name:session.u,displayName:session.u},pubKeyCredParams:[{type:'public-key',alg:-7},{type:'public-key',alg:-257}],authenticatorSelection:{authenticatorAttachment:'platform',userVerification:'required',residentKey:'discouraged'},timeout:60000,attestation:'none'}});
+    const a=accs().find(x=>x.u===session.u);
+    ls('tm_bio',JSON.stringify({u:session.u,id:b64u(cr.rawId),hs:a.h.slice(0,16)}));toast('Đã bật đăng nhập bằng vân tay / khuôn mặt');render();
+  }catch(e){toast(e&&e.name==='NotAllowedError'?'Bạn đã hủy hoặc chưa xác thực được':'Không bật được: '+((e&&(e.message||e.name))||'lỗi không rõ'))}
+}
+async function bioLogin(){
+  const b=jget('tm_bio',null),msg=s=>{const e=$('#lge');if(e)e.textContent=s};if(!b)return;
+  try{
+    await navigator.credentials.get({publicKey:{challenge:crypto.getRandomValues(new Uint8Array(32)),allowCredentials:[{type:'public-key',id:unb64u(b.id)}],userVerification:'required',timeout:60000}});
+  }catch(e){msg('Không xác thực được. Hãy đăng nhập bằng mật khẩu.');return}
+  const a=accs().find(x=>x.u===b.u);
+  if(!a){ls('tm_bio',null);msg('Tài khoản không còn tồn tại. Hãy đăng nhập bằng mật khẩu.');return}
+  if(a.h.slice(0,16)!==b.hs){ls('tm_bio',null);msg('Mật khẩu đã được đổi. Hãy đăng nhập bằng mật khẩu mới và bật lại vân tay / khuôn mặt.');return}
+  lgOpen(a);
+}
+function bioHTML(){const b=jget('tm_bio',null);
+  if(!bioOK)return '<p class="hint2">Đăng nhập bằng vân tay / khuôn mặt: thiết bị hoặc ứng dụng này chưa hỗ trợ.</p>';
+  return '<p class="hint2">Đăng nhập nhanh bằng vân tay, khuôn mặt hoặc khóa màn hình của máy. '+(b?'Đang bật cho tài khoản <b>'+esc(b.u)+'</b> trên máy này.':'Chưa bật.')+'</p><div class="acts"><button type="button" data-act="bioon">'+(b?'Bật lại cho tài khoản này':'Bật vân tay / khuôn mặt')+'</button>'+(b?'<button type="button" class="del" data-act="biooff">Tắt</button>':'')+'</div>'}
+function accHTML(){const s=session||{u:'',role:'guest'},ad=s.role==='admin';
+  return `<section class="portals"><h3>Tài khoản</h3><p>Đang đăng nhập: <b>${esc(s.u)}</b> (${ad?'Quản trị viên':'Khách'}). App tự khóa sau 10 phút không dùng.</p><div class="acts"><button type="button" data-act="lock">Đăng xuất</button>${ad?'<button type="button" data-act="pwc">Đổi mật khẩu</button><button type="button" data-act="pwr">Khôi phục mật khẩu gốc</button><button type="button" data-act="mk">Tạo cấu hình tài khoản</button>':''}</div>${ad?'<p class="hint2">Mật khẩu đổi trong app chỉ có hiệu lực trên máy này. Để máy khác cùng đổi, gửi “mã cập nhật” do app tạo ra sau khi đổi.</p>':''}${ad?'':'<p class="hint2">Tài khoản khách chỉ được tra cứu. Cần sửa dữ liệu, hãy liên hệ quản trị viên.</p>'}${bioHTML()}</section>`}
+function cfgForm(){modal('Tạo cấu hình tài khoản',[{label:'Tên đăng nhập',ph:'ví dụ: qltt'},{label:'Mật khẩu',pw:2},{label:'Vai trò (gõ admin hoặc khach)',value:'khach'}],v=>{
+  const u=v[0].trim().toLowerCase(),p=v[1],r=v[2].trim().toLowerCase();
+  if(!/^[a-z0-9._-]{3,20}$/.test(u))return 'Tên đăng nhập 3–20 ký tự: chữ thường, số, dấu . _ -';
+  if(p.length<6)return 'Mật khẩu cần từ 6 ký tự.';
+  if(r!=='admin'&&r!=='khach')return 'Vai trò chỉ là admin hoặc khach.';
+  const s=Math.random().toString(16).slice(2,10)+Math.random().toString(16).slice(2,6);
+  const line=JSON.stringify({u,s,h:hashPw(u,p,s),r:r==='admin'?'admin':'guest'});
+  Promise.resolve().then(()=>{const o=$('#ov');o.innerHTML='<div class="md" role="dialog" aria-modal="true"><h3>Dòng cấu hình tài khoản</h3><p class="hint2">Mở file index.html, tìm dòng bắt đầu bằng “const ACCOUNTS=”, thêm dòng này vào danh sách (hoặc thay dòng cũ của tài khoản đó), rồi build lại app. Hoặc gửi dòng này cho người hỗ trợ.</p><textarea id="cf" style="min-height:110px">'+esc(line)+'</textarea><div class="row"><button type="button" id="c1">Sao chép</button><button type="button" class="ok" id="c2">Đóng</button></div></div>';o.classList.add('on');$('#c1').onclick=()=>copy($('#cf').value);$('#c2').onclick=closeModal});
+  return null},'Tạo dòng cấu hình')}
+
+
+/* ===== Ngành hàng, ghim, lịch sử, biên bản, kiểm tra dữ liệu, hướng dẫn ===== */
+function mr(r,nq){const gm=g=>(!nq||g._n.includes(nq))&&(!catF||g._c.includes(catF));return r.groups.some(gm)||!!(nq&&r._n.includes(nq)&&(!catF||r.groups.some(g=>g._c.includes(catF))))}
+const jget=(k,d)=>{try{return JSON.parse(ls(k)||'')||d}catch(e){return d}};
+const pins=()=>jget('tm_pins',[]);
+function pinSort(a){const P=pins();return a.slice().sort((x,y)=>(P.includes(y.id)?1:0)-(P.includes(x.id)?1:0))}
+function addRecent(v){ls('tm_recent',JSON.stringify([v].concat(jget('tm_recent',[]).filter(x=>x!==v)).slice(0,8)))}
+const updTxt=()=>'Dữ liệu cập nhật lần cuối: '+(ls('tm_upd')||'bản gốc (07/07/2026)');
+function homeX(){
+  const P=pins(),R=jget('tm_recent',[]),pr=DATA.filter(r=>P.includes(r.id));let h='';
+  if(pr.length)h+='<h3>Đại diện đã ghim</h3>'+pr.map(r=>repCard(r,'','all')).join('');
+  if(R.length)h+='<p class="hint2">Tra gần đây:</p><div class="chips">'+R.map((x,i)=>`<button type="button" data-act="rc" data-id="${i}">${esc(x)}</button>`).join('')+'<button type="button" data-act="clr">Xóa lịch sử</button></div>';
+  return h+'<p class="hint2">'+esc(updTxt())+'</p>';
+}
+function copyMinute(id){
+  const r=DATA.find(x=>x.id===id);if(!r)return;const v=$('#q').value.trim(),k=sq(v),gs=k?r.groups.filter(g=>g._n.includes(k)):[],use=gs.length?gs:r.groups;
+  copy(['THÔNG TIN TRA CỨU NHÃN HIỆU (lúc '+new Date().toLocaleString('vi-VN')+')',v?'Nhãn hiệu/từ khóa tra cứu: '+v:'','Đơn vị đại diện chủ thể quyền: '+r.name,r.contact?'Người liên hệ: '+r.contact:'','Số điện thoại: '+(r.phones.join(', ')||'(chưa có)'),'Nhóm hàng hóa liên quan:'].filter(Boolean).concat(use.map(g=>'- '+(g[0]?g[0]+': ':'')+g[1]),['Nguồn: danh sách đại diện trong ứng dụng, cần xác minh trước khi sử dụng chính thức.']).join('\n'));
+}
+function checkData(){
+  const is=[],seen=new Map();
+  DATA.forEach(r=>{const nm=sq(r.name),o=seen.get(nm);if(o&&o.contact===r.contact)is.push('STT '+r.stt+': trùng tên và người liên hệ với STT '+o.stt);seen.set(nm,r);
+    if(!r.phones.length)is.push('STT '+r.stt+': chưa có số điện thoại');
+    r.phones.forEach(p=>{const d=p.replace(/\D/g,'');if(d.length<9||d.length>12)is.push('STT '+r.stt+': số “'+p+'” có vẻ sai độ dài')});
+    if(!r.groups.length)is.push('STT '+r.stt+': chưa có nhãn hiệu');
+    const s=new Set(),dup=new Set();r.groups.forEach(g=>g[1].split(/[;,()]+/).map(sq).filter(x=>x.length>=3).forEach(x=>{if(s.has(x))dup.add(x);s.add(x)}));
+    if(dup.size)is.push('STT '+r.stt+': nhãn hiệu bị lặp ('+[...dup].slice(0,4).join(', ')+')');});
+  const o=$('#ov');
+  o.innerHTML='<div class="md" role="dialog" aria-modal="true"><h3>Kiểm tra dữ liệu</h3>'+(is.length?'<p>Phát hiện <b>'+is.length+'</b> mục cần xem lại:</p>'+is.slice(0,60).map(x=>'<div class="grp">'+esc(x)+'</div>').join('')+(is.length>60?'<p class="hint2">…và '+(is.length-60)+' mục khác.</p>':''):'<p>Không phát hiện vấn đề nào.</p>')+'<div class="row"><button type="button" class="ok" id="mc">Đóng</button></div></div>';
+  o.classList.add('on');$('#mc').onclick=closeModal;return is;
+}
+const ONB=[['Tra cứu nhanh','Gõ tên nhãn hiệu, công ty, người liên hệ hoặc số điện thoại. Có thể gõ không dấu, không cách. Bấm nút ngành hàng để lọc (phân loại ngành hàng chỉ mang tính gần đúng).'],['Quét ảnh','Vào tab Tiện ích để quét ảnh nhãn hiệu bằng camera hoặc ảnh có sẵn.'],['Cập nhật danh sách','Tab Tất cả đại diện để thêm, sửa, xóa. Tab Tiện ích để tải file Word hoặc Excel mới và kiểm tra dữ liệu.'],['Quyền riêng tư','Dữ liệu lưu trên máy này. Ảnh chỉ được gửi ra ngoài khi bạn bấm quét và dùng dịch vụ đọc chữ trực tuyến hoặc khóa API.']];
+function showOnb(i){i=i||0;const o=$('#ov'),s=ONB[i];
+  o.innerHTML=`<div class="md" role="dialog" aria-modal="true"><p class="hint2">Bước ${i+1}/${ONB.length}</p><h3>${esc(s[0])}</h3><p>${esc(s[1])}</p><div class="row"><button type="button" id="o1">Bỏ qua</button><button type="button" class="ok" id="o2">${i<ONB.length-1?'Tiếp':'Bắt đầu'}</button></div></div>`;o.classList.add('on');
+  const end=()=>{ls('tm_onb','1');closeModal()};$('#o1').onclick=end;$('#o2').onclick=()=>i<ONB.length-1?showOnb(i+1):end();
+}
+
+/* ===== Chia sẻ, thùng rác, ghi chú, nhật ký, tự khóa ===== */
+function copyRep(id){const s=repText(id);if(s)copy(s)}
+function shareRep(id){const s=repText(id);if(!s)return;if(navigator.share){navigator.share({text:s}).catch(()=>{})}else copy(s)}
+let pendingUndo='';
+function showUndo(msg){const u=$('#undo');u.innerHTML=esc(msg)+' <button type="button" id="ub">Hoàn tác</button>';u.classList.add('on');const hide=()=>u.classList.remove('on');$('#ub').onclick=()=>{hide();trashAct('tr','0')};setTimeout(hide,8000)}
+function trash(ty,d,rid){pendingUndo=ty==='rep'?d.name:ty==='grp'?'nhóm nhãn hiệu':d.name;const L=jget('tm_trash',[]);L.unshift({t:ty,rid,d:JSON.parse(JSON.stringify(d,(k,v)=>k[0]==='_'?undefined:v)),at:new Date().toLocaleString('vi-VN')});ls('tm_trash',JSON.stringify(L.slice(0,30)))}
+const trLabel=x=>x.t==='rep'?'Đại diện: '+x.d.name:x.t==='grp'?'Nhóm nhãn hiệu: '+((x.d[0]?x.d[0]+' - ':'')+x.d[1]).slice(0,50):'Liên kết: '+x.d.name;
+function trashHTML(){const L=jget('tm_trash',[]);
+  return `<section class="portals"><h3>Thùng rác (${L.length})</h3><p>Các mục vừa xóa được giữ lại để khôi phục (tối đa 30 mục).</p>`+L.slice(0,10).map((x,i)=>`<div class="grp"><b>${esc(trLabel(x))}</b><small>${esc(x.at)}</small><div class="acts"><button type="button" data-act="tr" data-id="${i}">Khôi phục</button><button type="button" class="del" data-act="td" data-id="${i}">Xóa hẳn</button></div></div>`).join('')+(L.length?'<div class="acts"><button type="button" class="del" data-act="te">Dọn sạch thùng rác</button></div>':'')+'</section>'}
+function trashAct(a,i){
+  const L=jget('tm_trash',[]);
+  if(a==='te'){ls('tm_trash',null);return render()}
+  const x=L[+i];if(!x)return;
+  if(a==='tr'){
+    if(x.t==='rep'){if(DATA.some(r=>r.id===x.d.id))x.d.id='r'+Date.now();DATA.push(x.d)}
+    else if(x.t==='grp'){const r=DATA.find(r=>r.id===x.rid);if(!r){toast('Không khôi phục được: đại diện chứa nhóm này đã bị xóa');return}r.groups.push(x.d)}
+    else PORTALS.push(x.d);
+    L.splice(+i,1);ls('tm_trash',JSON.stringify(L));commit();toast('Đã khôi phục');
+  }else{L.splice(+i,1);ls('tm_trash',JSON.stringify(L));render()}
+}
+const notesMap=()=>jget('tm_notes',{});
+const getLog=r=>((jget('tm_clog',{})[r.id])||[]).concat(r.log||[]).sort((a,b)=>a.t-b.t);
+const getMemo=r=>notesMap()[r.id]||r.memo||'';
+function formMemo(r){modal('Ghi chú riêng',[{label:'Ghi chú của bạn về '+r.name,area:1,value:getMemo(r),ph:'Ví dụ: Gọi giờ hành chính, liên hệ chị A',hint:'Ghi chú chỉ lưu trên máy này, không làm thay đổi danh sách đại diện.'}],v=>{const m=notesMap(),x=v[0].trim();if(x)m[r.id]=x;else delete m[r.id];ls('tm_notes',JSON.stringify(m));if(isAdmin()&&r.memo)r.memo='';return null},'Lưu ghi chú',true)}
+function showLog(r){const o=$('#ov');o.innerHTML='<div class="md" role="dialog" aria-modal="true"><h3>Nhật ký liên hệ</h3><p class="hint2">'+esc(r.name)+'</p>'+getLog(r).slice().reverse().slice(0,20).map(x=>'<div class="grp">'+esc(new Date(x.t).toLocaleString('vi-VN'))+' - '+esc(x.k)+' '+esc(x.p)+'</div>').join('')+'<div class="row"><button type="button" class="ok" id="mc">Đóng</button></div></div>';o.classList.add('on');$('#mc').onclick=closeModal}
+document.addEventListener('click',e=>{const a=e.target.closest&&e.target.closest('[data-call]');if(!a)return;const id=a.dataset.id;if(!DATA.some(x=>x.id===id))return;const m=jget('tm_clog',{});m[id]=(m[id]||[]).concat({t:Date.now(),k:a.dataset.call,p:a.dataset.ph}).slice(-50);ls('tm_clog',JSON.stringify(m))});
+/* nhật ký thay đổi */
+let lastSnap=null;
+const snap=()=>{const m=new Map();DATA.forEach(r=>m.set(r.id,{n:r.name,s:JSON.stringify([r.contact,r.phones,r.note]),g:JSON.stringify(r.groups)}));PORTALS.forEach(x=>m.set('P'+x.id,{n:'Liên kết '+x.name,s:JSON.stringify([x.desc,x.url]),g:''}));return m};
+function histDiff(){
+  if(!lastSnap)return;const s=snap(),L=[];
+  s.forEach((v,k)=>{const o=lastSnap.get(k);if(!o)L.push('Thêm: '+v.n);else{if(o.g!==v.g)L.push('Sửa nhãn hiệu: '+v.n);if(o.s!==v.s||o.n!==v.n)L.push('Sửa thông tin: '+v.n)}});
+  lastSnap.forEach((v,k)=>{if(!s.has(k))L.push('Xóa: '+v.n)});
+  lastSnap=s;if(!L.length)return;
+  const at=new Date().toLocaleString('vi-VN'),ent=L.length>30?[{t:at,d:'Cập nhật hàng loạt ('+L.length+' thay đổi)'}]:L.map(d=>({t:at,d}));
+  ls('tm_hist',JSON.stringify(ent.concat(jget('tm_hist',[])).slice(0,100)));
+}
+function showHist(){const H=jget('tm_hist',[]),o=$('#ov');o.innerHTML='<div class="md" role="dialog" aria-modal="true"><h3>Nhật ký thay đổi</h3><p class="hint2">Ghi lại các thay đổi thực hiện trên máy này.</p>'+(H.length?H.slice(0,40).map(x=>'<div class="grp"><b>'+esc(x.d)+'</b><small>'+esc(x.t)+'</small></div>').join(''):'<p>Chưa có thay đổi nào.</p>')+'<div class="row"><button type="button" class="ok" id="mc">Đóng</button></div></div>';o.classList.add('on');$('#mc').onclick=closeModal}
+/* tự khóa sau 10 phút không dùng */
+let lastAct=Date.now();const LOCK_MS=10*60*1000;
+['click','touchstart','keydown','input','scroll'].forEach(ev=>document.addEventListener(ev,()=>{lastAct=Date.now()},true));
+function idleCheck(){if(session&&Date.now()-lastAct>LOCK_MS)logout()}
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)idleCheck()});
+setInterval(idleCheck,30000);
+/* ===== Quét ảnh nhãn hiệu ===== */
+const APP_VER='1.9',APP_DATE='14/11/2026',AKEY='tm_apikey_v1',OKEY='tm_ocrkey_v1',MODEL='claude-sonnet-5-5';
+let scanHTML='',scanBrands=[],ocrChips='';
+function setScan(h){scanHTML=h;const o=$('#scanOut');if(o)o.innerHTML=h}
+function keyForm(){modal('Khóa API Anthropic',[{label:'Khóa API (bắt đầu bằng sk-ant-)',pw:2,hint:'Khóa chỉ lưu trên máy này. Nên dùng khóa có đặt hạn mức chi phí và không chia sẻ app kèm khóa.'}],v=>{const k=v[0].trim();if(!/^sk-ant-/.test(k))return 'Khóa không đúng định dạng.';ls(AKEY,k);return null},'Lưu khóa')}
+async function claude(content,tools){
+  const key=ls(AKEY);if(!key)throw new Error('Chưa nhập khóa API. Vào mục Quét ảnh nhãn hiệu để nhập.');
+  let r;try{r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'content-type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify(Object.assign({model:MODEL,max_tokens:1000,messages:[{role:'user',content}]},tools?{tools}:{}))})}
+  catch(e){throw new Error('Không kết nối được. Kiểm tra mạng rồi thử lại.')}
+  const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(r.status===401?'Khóa API không đúng hoặc đã bị thu hồi.':(j.error&&j.error.message)||('Lỗi '+r.status));
+  return (j.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('\n');
+}
+function loadImg(file){return new Promise((ok,no)=>{const fr=new FileReader();fr.onerror=()=>no(new Error('Không đọc được ảnh này.'));
+  fr.onload=()=>{const i=new Image();i.onload=()=>{const s=Math.min(1,1280/Math.max(i.width,i.height)),c=document.createElement('canvas');c.width=Math.round(i.width*s);c.height=Math.round(i.height*s);c.getContext('2d').drawImage(i,0,0,c.width,c.height);ok(c.toDataURL('image/jpeg',.85).split(',')[1])};
+    i.onerror=()=>no(new Error('Định dạng ảnh chưa được hỗ trợ. Hãy chụp lại hoặc chọn ảnh JPG/PNG.'));i.src=fr.result};fr.readAsDataURL(file)})}
+function localMatch(name){
+  const k=sq(name);if(k.length<2)return[];
+  const tk=r=>r.groups.flatMap(g=>g[1].split(/[;,()]+/).map(sq).filter(Boolean));
+  const ex=DATA.filter(r=>tk(r).includes(k));if(ex.length)return ex;
+  return k.length<3?[]:DATA.filter(r=>tk(r).some(x=>x.includes(k)||(x.length>=4&&k.includes(x))));
+}
+function showScan(note){
+  if(!scanBrands.length){setScan('<p class="note">Không nhận ra nhãn hiệu nào trong ảnh.'+(note?' '+esc(note):'')+' Hãy chụp gần, rõ nét, đủ sáng rồi thử lại.</p>');return}
+  let h='<p class="hint2">Kết quả chỉ mang tính tham khảo, cần xác minh trước khi sử dụng chính thức.</p>'+(note?'<p class="hint2">'+esc(note)+'</p>':''),miss=0;
+  scanBrands.forEach((b,i)=>{
+    const m=localMatch(b.name);
+    h+=`<h3>${esc(b.name)}${b.confidence?' <small>(độ tin cậy: '+esc(b.confidence)+')</small>':''}</h3>`;
+    if(m.length)h+=m.map(r=>repCard(r,b.name,'search')).join('');
+    else{miss++;h+=`<p class="note">“${esc(b.name)}” chưa có trong danh sách đơn vị đại diện của app. Điều này chưa có nghĩa nhãn hiệu chưa được bảo hộ tại Việt Nam.</p><div class="acts">${ls(AKEY)?`<button type="button" data-act="ws" data-id="${i}">Tìm thêm trên mạng</button>`:''}<button type="button" data-copy="${esc(b.name)}">Sao chép tên nhãn hiệu</button></div><div id="ws_${i}"></div>`}
+  });
+  if(miss)h+='<h3>Tra cứu bảo hộ trên cổng chính thức</h3>'+PORTALS.map(x=>`<div class="pl"><a href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.name)}${x.desc?'<small>'+esc(x.desc)+'</small>':''}</a></div>`).join('');
+  setScan(h+ocrChips);
+}
+function handleScanText(txt){
+  const m=txt.match(/\{[\s\S]*\}/);if(!m)throw new Error('Không hiểu kết quả nhận dạng. Hãy thử lại.');
+  const j=JSON.parse(m[0]);scanBrands=(j.brands||[]).filter(b=>b&&typeof b.name==='string'&&b.name.trim()).slice(0,5);showScan(j.note||'');
+}
+async function scanB64(b64){
+  ocrChips='';
+  if(!ls(AKEY))return scanOCR(b64);
+  setScan('<p>Đang nhận dạng nhãn hiệu…</p>');
+  try{handleScanText(await claude([{type:'image',source:{type:'base64',media_type:'image/jpeg',data:b64}},{type:'text',text:'Bạn hỗ trợ cán bộ quản lý thị trường nhận dạng nhãn hiệu hàng hóa trong ảnh. Liệt kê tên các nhãn hiệu hoặc logo nhìn thấy rõ (tối đa 5), ghi đúng cách viết trên sản phẩm, không đoán khi không chắc. Chỉ trả về JSON: {"brands":[{"name":"","confidence":"cao|trung bình|thấp"}],"note":"ghi chú ngắn nếu ảnh mờ hoặc không thấy nhãn hiệu"}'}]))}
+  catch(e){setScan('<p class="note">'+esc(e&&e.message?e.message:'Không quét được ảnh.')+'</p>')}
+}
+async function scan(file){
+  setScan('<p>Đang đọc ảnh…</p>');
+  let b64;try{b64=await loadImg(file)}catch(e){setScan('<p class="note">'+esc(e&&e.message?e.message:'Không đọc được ảnh.')+'</p>');return}
+  scanB64(b64);
+}
+
+/* ===== Nhận dạng chữ không cần khóa API (Tesseract.js) ===== */
+const TJS='https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js';
+function loadTess(){return window.Tesseract?Promise.resolve():new Promise((ok,no)=>{const s=document.createElement('script');s.src=TJS;s.onload=ok;s.onerror=()=>no(new Error('Không tải được bộ đọc chữ. Lần dùng đầu tiên cần có mạng.'));document.head.appendChild(s)})}
+async function ocrText(b64){
+  await loadTess();
+  if(!window.Tesseract)throw new Error('Bộ đọc chữ đã tải nhưng không khởi động được trên máy này.');
+  const det=e=>e&&e.message?e.message:(typeof e==='string'?e:(()=>{try{return JSON.stringify(e)}catch(x){return 'không rõ'}})());
+  let to;const lim=new Promise((_,no)=>{to=setTimeout(()=>no(new Error('Quá thời gian (90 giây). Bộ đọc chữ không chạy được trên máy hoặc app này, hoặc tải dữ liệu ngôn ngữ bị chặn.')),90000)});
+  try{const r=await Promise.race([window.Tesseract.recognize('data:image/jpeg;base64,'+b64,'eng'),lim]);return (r&&r.data&&r.data.text)||''}
+  catch(e){throw new Error(e&&e.message&&e.message.indexOf('Quá thời gian')===0?e.message:'Bộ đọc chữ gặp lỗi: '+det(e))}
+  finally{clearTimeout(to)}
+}
+function lev(a,b){const d=[];for(let i=0;i<=a.length;i++)d[i]=[i];for(let j=1;j<=b.length;j++)d[0][j]=j;for(let i=1;i<=a.length;i++)for(let j=1;j<=b.length;j++)d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1));return d[a.length][b.length]}
+function ocrCandidates(text){
+  const toks=(text.match(/[A-Za-z0-9&'\-]{2,}/g)||[]).map(sq).filter(Boolean);
+  const B=new Map();DATA.forEach(r=>r.groups.forEach(g=>g[1].split(/[;,()]+/).forEach(x=>{x=x.trim().replace(PRE,'');const k=sq(x);if(k.length>=3&&k.length<=24&&!B.has(k))B.set(k,x)})));
+  const f=new Map();
+  for(let i=0;i<toks.length;i++){let acc='';for(let n=0;n<3&&i+n<toks.length;n++){acc+=toks[i+n];if(B.has(acc)&&!f.has(acc))f.set(acc,{name:B.get(acc),confidence:'trung bình'})}}
+  if(!f.size)for(const w of new Set(toks)){if(w.length<5||/^\d+$/.test(w))continue;for(const [k,v] of B){if(Math.abs(k.length-w.length)<=1&&lev(k,w)<=1&&!f.has(k))f.set(k,{name:v,confidence:'thấp'})}}
+  return [...f.values()].slice(0,5);
+}
+function chipsFor(text){
+  const w=[...new Set((text.match(/[A-Za-z][A-Za-z0-9&'\-]{2,}/g)||[]).map(x=>x.toUpperCase()))].sort((a,b)=>b.length-a.length).slice(0,12);
+  return w.length?'<p class="hint2">Chữ đọc được trên ảnh. Bấm vào chữ là tên nhãn hiệu để tra cứu:</p><div class="chips">'+w.map(x=>`<button type="button" data-act="ow" data-id="${esc(x)}">${esc(x)}</button>`).join('')+'</div>':'';
+}
+
+function okeyForm(){modal('Khóa OCR.space (miễn phí)',[{label:'Khóa OCR.space',pw:2,value:ls(OKEY)||'',hint:'Đăng ký miễn phí tại ocr.space/ocrapi để nhận khóa (25.000 lượt/tháng). Để trống để xóa khóa. Khi dùng dịch vụ này, ảnh được gửi tới máy chủ OCR.space để đọc chữ.'}],v=>{const k=v[0].trim();if(k&&k.length<8)return 'Khóa quá ngắn.';ls(OKEY,k||null);return null},'Lưu khóa')}
+async function ocrSpace(b64,key){
+  const f=new FormData();f.append('apikey',key);f.append('base64Image','data:image/jpeg;base64,'+b64);f.append('language','eng');f.append('OCREngine','2');f.append('scale','true');
+  let r;try{r=await fetch('https://api.ocr.space/parse/image',{method:'POST',body:f})}catch(e){throw new Error('không kết nối được (mạng hoặc bị chặn)')}
+  const j=await r.json().catch(()=>null);if(!j)throw new Error('phản hồi không hợp lệ ('+r.status+')');
+  if(j.IsErroredOnProcessing)throw new Error([].concat(j.ErrorMessage||'lỗi xử lý').join(' '));
+  return (j.ParsedResults||[]).map(x=>x.ParsedText||'').join('\n');
+}
+async function ocrAny(b64){
+  const k=ls(OKEY);let e0='';
+  if(k){try{return await ocrSpace(b64,k)}catch(e){e0=' | OCR.space: '+e.message}}
+  try{return await ocrText(b64)}catch(e1){
+    if(k)throw new Error(e1.message+e0);
+    try{return await ocrSpace(b64,'helloworld')}catch(e2){throw new Error(e1.message+' | Dự phòng OCR.space: '+e2.message)}}
+}
+async function scanOCR(b64){
+  setScan('<p>Đang đọc chữ trên ảnh… Lần đầu có thể mất 10–30 giây và cần có mạng.</p>');
+  try{
+    const text=await ocrAny(b64);scanBrands=ocrCandidates(text);ocrChips=chipsFor(text);
+    if(scanBrands.length)showScan('Kết quả đọc chữ tự động, hãy đối chiếu lại với ảnh.');
+    else setScan('<p class="note">Không thấy chữ nào trùng với nhãn hiệu trong danh sách.'+(ocrChips?'':' Hãy chụp gần, rõ nét, đủ sáng.')+'</p>'+ocrChips);
+  }catch(e){setScan('<p class="note">Không đọc được chữ trên ảnh.<br><b>Chi tiết:</b> '+esc(e&&e.message?e.message:String(e))+'</p><p class="hint2">Cách thử: kiểm tra Internet; thử ảnh khác (chụp gần, rõ, JPG); hoặc dùng ô tìm kiếm ở tab Tra cứu và gõ thẳng tên nhãn hiệu.</p>')}
+}
+let camStream=null;
+function closeCam(){if(camStream){camStream.getTracks().forEach(x=>x.stop());camStream=null}closeModal()}
+async function openCam(){
+  const bad='Máy hoặc app này không cho mở camera trực tiếp. Hãy dùng nút “Chụp ảnh bằng camera máy” hoặc “Chọn ảnh có sẵn trong máy”.';
+  if(!(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia)){setScan('<p class="note">'+bad+'</p>');return}
+  try{camStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}},audio:false})}catch(e){setScan('<p class="note">'+bad+'</p>');return}
+  const o=$('#ov');
+  o.innerHTML='<div class="md" role="dialog" aria-modal="true"><h3>Hướng camera vào nhãn hiệu</h3><video id="cv" playsinline autoplay muted style="width:100%;border-radius:10px;background:#000"></video><div class="row"><button type="button" id="cc">Đóng</button><button type="button" class="ok" id="cs">Chụp và quét</button></div></div>';
+  o.classList.add('on');const v=$('#cv');v.srcObject=camStream;try{await v.play()}catch(e){}
+  $('#cc').onclick=closeCam;
+  $('#cs').onclick=()=>{if(!v.videoWidth){return}const s=Math.min(1,1280/Math.max(v.videoWidth,v.videoHeight)),c=document.createElement('canvas');c.width=Math.round(v.videoWidth*s);c.height=Math.round(v.videoHeight*s);c.getContext('2d').drawImage(v,0,0,c.width,c.height);const g=c.toDataURL('image/jpeg',.85).split(',')[1];closeCam();scanB64(g)};
+}
+async function webInfo(i){
+  const b=scanBrands[i],o=$('#ws_'+i);if(!b||!o)return;o.innerHTML='<p>Đang tìm trên mạng…</p>';
+  try{
+    const txt=await claude('Tìm thông tin về nhãn hiệu "'+b.name+'": chủ sở hữu, đơn vị đại diện sở hữu công nghiệp tại Việt Nam (nếu có) và tình trạng bảo hộ tại Việt Nam. Trả lời ngắn gọn bằng tiếng Việt (tối đa 120 từ), nêu nguồn. Nếu không xác minh được thì nói rõ là không xác minh được, không suy đoán.',[{type:'web_search_20250305',name:'web_search',max_uses:3}]);
+    o.innerHTML='<div class="grp"><b>Thông tin tham khảo từ web</b>'+esc(txt).replace(/\n/g,'<br>')+'<p class="hint2">Chưa được kiểm chứng. Cần đối chiếu trên cổng tra cứu chính thức trước khi kết luận.</p></div>';
+  }catch(e){o.innerHTML='<p class="note">'+esc(e&&e.message?e.message:'Không tìm được thông tin.')+' Bạn có thể tra trực tiếp trên các cổng chính thức bên dưới.</p>'}
+}
+document.addEventListener('change',e=>{if(e.target&&(e.target.id==='si'||e.target.id==='sg')&&e.target.files&&e.target.files[0]){const f=e.target.files[0];e.target.value='';scan(f)}});
+
+/* ===== Nút Back của điện thoại; câu thận trọng ===== */
+let modalPushed=false,tabPushed=false,ignorePop=0;
+const ovEl=$('#ov');
+function hpush(){try{history.pushState({tm:1},'')}catch(e){}}
+function hback(){try{ignorePop++;history.back()}catch(e){ignorePop=Math.max(0,ignorePop-1)}}
+if(typeof MutationObserver!=='undefined')new MutationObserver(()=>{const on=ovEl.classList.contains('on');if(on&&!modalPushed){modalPushed=true;hpush()}else if(!on&&modalPushed){modalPushed=false;hback()}}).observe(ovEl,{attributes:true,attributeFilter:['class']});
+const _setTab=setTab;
+setTab=function(n){if(n!==1&&!tabPushed){tabPushed=true;hpush()}else if(n===1&&tabPushed){tabPushed=false;hback()}_setTab(n)};
+function onPop(){if(ignorePop>0){ignorePop--;return}if(modalPushed){modalPushed=false;closeModal();return}if(tabPushed){tabPushed=false;_setTab(1)}}
+if(typeof window!=='undefined'&&window.addEventListener)window.addEventListener('popstate',onPop);
+const _render=render;
+render=function(){_render();const l=$('#list');$('#disc').style.display=(tab!==3&&l.innerHTML.indexOf('class="rep"')>=0)?'block':'none'};
+lastSnap=snap();applyFont();startLogin();bioCheck().then(()=>{if(session&&tab===3)render()});
+$('#t1').onclick=()=>setTab(1);$('#t2').onclick=()=>setTab(2);$('#t3').onclick=()=>setTab(3);
+$('#chips').innerHTML=['HERMÈS','Gucci','Nike','Adidas','Honda','Casio','Unilever','Louis Vuitton','Apple','Yonex'].map(x=>`<button type="button">${x}</button>`).join('');
+$('#chips').addEventListener('click',e=>{const b=e.target.closest('button');if(b){$('#q').value=b.textContent;render()}});
+render();
+</script>
+</body>
+</html>
